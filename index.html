@@ -1,0 +1,3422 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SAAS JSSDK Demo</title><script src="//cnstatic01.e.vhall.com/vhall-new-saas/static/polyfill.js?v=20201111"></script><script src="//cdn.bootcss.com/es6-promise/4.1.1/es6-promise.auto.min.js"></script><script src="//cnstatic01.e.vhall.com/3rdlibs/vue/2.5.13/vue.min.js"></script><link rel="stylesheet" href="https://cnstatic01.e.vhall.com/3rdlibs/element-ui/2.4.9/index.css"><script src="//cnstatic01.e.vhall.com/3rdlibs/element-ui/2.4.9/index.js"></script><style>html,
+    body {
+      width: 100%;
+      height: 100%;
+      padding: 0px;
+      margin: 0px;
+      overflow: hidden;
+    }
+
+    #app {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .app-pc {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+    }
+
+    .l-contain {
+      flex: 1;
+      width: calc(100% - 300px) !important;
+      height: 100%;
+      background: #292929;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .demo-tool-tip {
+      position: absolute;
+      top: 50%;
+      right: 0px;
+      height: 80px;
+      width: 30px;
+      border-radius: 8px 0px 0px 8px;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, .6);
+      color: #fff;
+      text-align: center;
+      line-height: 24px;
+      font-size: 16px;
+      z-index: 899;
+      display: none;
+      padding-top: 5px;
+    }
+
+    .demo-tool-tip:hover {
+      cursor: pointer;
+    }
+
+    .demo-control {
+      width: 200px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      bottom: 0px;
+      right: -200px;
+      z-index: 900;
+      background: rgba(0, 0, 0, .6);
+      transition: .3s all;
+    }
+
+    .demo-control span {
+      display: inline-block;
+      min-width: 80px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      margin: 5px 8px;
+      background: #fff;
+      color: #333;
+      border-radius: 4px;
+      font-size: 14px;
+      padding: 0px 5px;
+    }
+
+    .demo-control input {
+      display: inline-block;
+      width: 50px;
+    }
+
+    .demo-control span:hover {
+      cursor: pointer;
+    }
+
+    .l-contain .vh-doc-control {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      /* width:50px; */
+      /* min-height:30px; */
+      width: 100%;
+      height: 30px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      z-index: 990;
+      display: block;
+    }
+
+    .l-contain .vh-doc-control span {
+      display: inline-block;
+      width: 80px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      color: #333;
+      font-size: 16px;
+      border-radius: 8px;
+      background: #eaeaea;
+      color: #333;
+    }
+
+    .l-contain .vh-doc-control span:hover {
+      cursor: pointer;
+    }
+
+    .l-contain .doc-wrap {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      overflow: hidden;
+    }
+
+    .l-contain #docWrap img {
+      /* display: inline-block;
+            width: auto!important;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 50%;
+            transform: translate(-50%); */
+    }
+
+    .l-contain .doc-wrap .jssdk-db-wrap {
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%);
+    }
+
+    /* .doc-wrap .jssdk-db-wrap img {
+            transform: translate3d(-50%, 0px, 0px)!important;
+        } */
+    .r-contain {
+      width: 350px;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #000;
+      position: relative;
+    }
+
+    .r-contain .video-container {
+      height: 210px;
+      width: 100%;
+      position: relative;
+    }
+
+    .r-contain .video-wrap {
+      /* height:210px;
+            width:100%; */
+      height: 100%;
+      width: 100%;
+      position: relative;
+    }
+
+    .r-contain .remote-wrap {
+      height: 100%;
+      width: 100%;
+      position: relative;
+      display: none;
+    }
+
+    .r-contain .remote-wrap .remote-stream-host {
+      height: 100%;
+      width: 100%;
+      position: relative;
+      margin: auto;
+    }
+
+    .r-contain .remote-stream-host .audio-cover {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+    }
+
+    .r-contain .remote-wrap .remote-special {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      display: none;
+      z-index: 10;
+    }
+
+    .r-contain .remote-wrap .remote-more {
+      height: 60px;
+      width: 100%;
+      position: relative;
+      display: none;
+    }
+
+    .r-contain .remote-wrap .remote-more-item {
+      height: 50px;
+      padding: 5px 4px;
+      float: left;
+      position: relative;
+    }
+
+    .r-contain .remote-wrap .remove-cover {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      z-index: 20;
+    }
+
+    .remote-wrap .remove-cover .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .8);
+    }
+
+    /* .r-contain .audio-back{
+            background: url('//cnstatic01.e.vhall.com/3rdlibs/vhall-static/img/h5recording.png') no-repeat!important;
+            background-size: 100%;
+            background-position: center;
+        } */
+    .remove-cover .play-btn i {
+      display: inline-block;
+      width: 0px;
+      height: 0px;
+      border-bottom: 20px solid transparent;
+      border-top: 20px solid transparent;
+      border-left: 30px solid rgb(255, 255, 255, .8);
+      position: absolute;
+      top: 50%;
+      left: 54%;
+      transform: translate(-50%, -50%);
+    }
+
+    .remove-cover .play-btn i:hover {
+      cursor: pointer;
+    }
+
+    .remove-cover img {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .r-contain .menu-tab {
+      width: 100%;
+      height: 40px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+
+    .r-contain .menu-tab span {
+      display: inline-block;
+      width: 70%;
+      height: 38px;
+      line-height: 40px;
+      border-bottom: 2px solid #000;
+      color: #999;
+    }
+
+    .r-contain .menu-tab div {
+      flex: 1;
+      text-align: center;
+    }
+
+    .r-contain .menu-tab .active>span {
+      color: #1e90ff;
+      border-bottom-color: #1e90ff;
+    }
+
+    .r-contain .menu-tab span:hover {
+      color: #1e90ff;
+      cursor: pointer;
+    }
+
+    .r-contain .room-content {
+      flex: 1;
+      height: 100%;
+      height: calc(100% - 320px) !important;
+      position: relative;
+    }
+
+    .r-contain .room-content .chat-content,
+    .r-contain .room-content .qa-content,
+    .r-contain .room-content .notice-content {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
+      display: none;
+    }
+
+    .r-contain .room-content .doc-wrap {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
+      z-index: -1;
+    }
+
+    /* .r-contain .room-content .doc-wrap #doc-content{
+            top:50%!important;
+            left:50%!important;
+            transform:translate(-50%, -50%);
+        } */
+    .r-contain .room-content .chat-content {
+      display: block;
+    }
+
+    .chat-content .chat-item,
+    .qa-content .qa-item {
+      width: 100%;
+      min-height: 30px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+      box-sizing: border-box;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .qa-content .qa-item {
+      flex-direction: column;
+      margin-bottom: 10px;
+      padding: 5px 22px;
+    }
+
+    .qa-content .qa-item .self-qa {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+    }
+
+    .qa-item .self-qa .avatar {
+      width: 32px;
+      height: 32px;
+      background: #eaeaea;
+      margin-right: 10px;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    .qa-item .self-qa .avatar img {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      border-radius: 16px;
+    }
+
+    .qa-item .self-qa .wrap {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .self-qa .r-wrap .r-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      color: #6f6e6e;
+      font-size: 16px;
+    }
+
+    .self-qa .r-wrap .r-content {
+      flex: 1;
+      color: #fff;
+      overflow: hidden;
+      word-wrap: break-word;
+      font-size: 16px;
+      width: 100%;
+      min-height: 1px;
+      margin-top: 5px;
+    }
+
+    .qa-item .r-answer {
+      width: 240px;
+      margin: 0px 0px 10px 30px;
+      overflow: hidden;
+      min-height: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      background: #202026;
+      border: 1px solid #393940;
+      box-sizing: border-box;
+      padding: 5px;
+    }
+
+    .qa-item .r-answer .answer-info {
+      font-size: 12px;
+      color: #909090;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .qa-item .r-answer .answer-info .answer-role {
+      color: red;
+    }
+
+    .qa-item .r-answer .answer-content {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #fff;
+      overflow: hidden;
+      word-wrap: break-word;
+    }
+
+    .chat-content .chat-item .l-avatar {
+      width: 28px;
+      height: 28px;
+      background: #eaeaea;
+      margin-right: 10px;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    .chat-content .chat-item .l-avatar img {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+    }
+
+    .chat-content .chat-item .r-info,
+    .qa-content .qa-item .r-wrap {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .chat-item .r-info .r-name-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      font-size: 14px;
+      color: #1ad5ce;
+    }
+
+    .chat-item .r-info .r-name-info .r-role {
+      margin-left: 10px;
+      background-color: rgba(30, 144, 255, .2);
+      color: #1e90ff;
+    }
+
+    .chat-item .r-info .r-content {
+      flex: 1;
+      font-size: 14px;
+      color: #fff;
+      width: 100%;
+      min-height: 1px;
+      margin-top: 5px;
+      overflow: hidden;
+      word-wrap: break-word;
+    }
+
+    .chat-item .r-info .r-content .r-info-quote {
+      background: #434343;
+      box-sizing: border-box;
+      padding: 4px;
+      border-radius: 4px;
+    }
+
+    .chat-item .r-info .r-content-iamge {
+      min-height: 1px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .chat-item .r-info .r-content-iamge img {
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      margin-right: 5px;
+    }
+
+    .r-contain .room-content .notice-content {
+      width: 100%;
+      min-height: 30px;
+      box-sizing: border-box;
+      padding: 8px 20px 8px 16px;
+      overflow-y: scroll;
+    }
+
+    .notice-content div {
+      font-size: 14px;
+      min-height: 20px;
+      color: #f7f7f7;
+      margin-bottom: 4px;
+      text-align: left;
+    }
+
+    .notice-content .notice-title {
+      margin-left: -8px;
+    }
+
+    .notice-content .notice-text {
+      width: 100%;
+      overflow: hidden;
+      word-wrap: break-word;
+    }
+
+    .notice-content .notice-time {
+      color: #999999;
+    }
+
+    .r-contain .room-interact {
+      height: 70px;
+      padding: 12px 16px 16px 16px;
+      position: relative;
+      background: #222;
+    }
+
+    .room-interact .msg-control {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .msg-control .face-pannel {
+      width: 200px;
+      height: 200px;
+      position: absolute;
+      bottom: 82px;
+      left: 0px;
+      background: #fff;
+      display: none;
+      overflow-y: scroll;
+      z-index: 20;
+    }
+
+    .msg-control .face-pannel img {
+      width: 24px;
+      height: 24px;
+      margin: 5px;
+      display: inline-block;
+    }
+
+    .msg-control .pic-tool {
+      width: 100%;
+      height: 22px;
+      padding: 0px 0px 8px 0px;
+    }
+
+    .msg-control .pic-tool span {
+      display: inline-block;
+      /* width:20px; */
+      width: 40px;
+      height: 20px;
+      margin-right: 10px;
+      color: #fff;
+    }
+
+    .msg-control .pic-tool span:hover,
+    .msg-control .send-msg .chat-send-msg:hover,
+    .msg-control .send-msg .qa-send-msg:hover {
+      cursor: pointer;
+    }
+
+    .msg-control .send-msg {
+      height: 40px;
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      justify-content: center;
+      background: #151515;
+    }
+
+    .msg-control .send-msg:after {
+      clear: both;
+    }
+
+    .msg-control .chat-send-control {
+      display: block;
+    }
+
+    .msg-control .qa-send-control {
+      display: none;
+    }
+
+    .msg-control .send-msg .chat-msg,
+    .msg-control .send-msg .qa-msg {
+      width: 60%;
+      height: 40px;
+      border: none;
+      outline: none;
+      color: #f7f7f7;
+      word-break: break-all;
+      padding: 0 20px 0 5px;
+      background: #151515;
+      text-indent: 15px;
+      float: left;
+    }
+
+    .msg-control .send-msg .chat-send-msg,
+    .msg-control .send-msg .qa-send-msg {
+      display: inline-block;
+      width: 50px;
+      height: 40px;
+      line-height: 40px;
+      margin-right: 10px;
+      border-radius: 15px;
+      border: none;
+      outline: none;
+      color: #fff;
+      background: #151515;
+      float: right;
+    }
+
+    /*---------------手机----------------*/
+    .app-mobile {
+      width: 100%;
+    }
+
+    .app-mobile .video-container {
+      width: 100%;
+      height: 240px;
+    }
+
+    .app-mobile .video-wrap {
+      width: 100%;
+      /* height:240px; */
+      height: 100%;
+    }
+
+    .mobile-doc-control {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      display: none;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+
+    .mobile-doc-control span {
+      display: inline-block;
+      height: 30px;
+      width: 50px;
+      text-align: center;
+      line-height: 30px;
+      color: #333;
+      background: #fff;
+      border-radius: 4px;
+      margin: 3px 5px;
+      font-size: 16px;
+    }
+
+    /*--------------签到---------------*/
+    .sign-wrap {
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .7);
+      z-index: 999;
+      display: none;
+    }
+
+    .sign {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 260px;
+      height: 200px;
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mobile-sign {
+      width: 300px;
+      margin: 0px;
+      transform: translate(-50%, -50%);
+    }
+
+    .mobile-sign .sign-title {
+      margin-top: 10px;
+    }
+
+    .mobile-sign .sign-btn {
+      margin-top: 10px;
+    }
+
+    .sign-header {
+      height: 44px;
+      line-height: 44px;
+      font-size: 14px;
+      border-top: 1px solid #e5e5e5;
+      border-bottom: 1px solid #e5e5e5;
+      color: #4e4e4e;
+      background-color: #f7f7f7;
+      text-align: center;
+      position: relative;
+    }
+
+    .sign-header img {
+      width: 13px;
+      height: 14px;
+      position: absolute;
+      right: 20px;
+      top: 16px;
+      cursor: pointer;
+    }
+
+    .sign-img {
+      width: 22px;
+      margin: auto;
+      display: none;
+      margin-top: 25px;
+    }
+
+    .sign-title {
+      font-size: 20px;
+      color: #333333;
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .sign-time {
+      flex: 1;
+      text-align: center;
+      margin-top: 15px;
+      color: #4e4e4e;
+    }
+
+    .sign-time>span {
+      color: #F15C5C;
+    }
+
+    .sign-btn {
+      display: block;
+      margin: auto;
+      margin-top: 20px;
+      background-color: #F15C5C;
+      color: white;
+      text-align: center;
+      height: 40px;
+      line-height: 40px;
+      cursor: pointer;
+      width: 80%;
+      border-radius: 4px;
+      border: 0;
+    }
+
+    /*-----------------抽奖----------------*/
+    .vh-lottery-wrap {
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .7);
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      z-index: 996;
+      display: none;
+    }
+
+    .vh-lottery {
+      width: 300px;
+      min-height: 20px;
+      background: #fff;
+      border-radius: 8px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .vh-lottery .lottery-header {
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      color: #999;
+      font-size: 16px;
+    }
+
+    .vh-lottery .lottery-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 10px;
+      display: none;
+    }
+
+    .vh-lottery .lottery-info .lottery-submit,
+    .vh-lottery .lottery-info .info>div {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+      margin: 5px 0px;
+    }
+
+    .vh-lottery .lottery-info .info>div>span {
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+      line-height: 30px;
+      text-align: right;
+      color: #999;
+      font-size: 16px;
+      margin-right: 20px;
+    }
+
+    .vh-lottery .lottery-info .info>div>input {
+      flex: 1;
+      display: inline-block;
+      border: 1px solid #eaeaea;
+      outline: none;
+      text-indent: 10px;
+      border-radius: 5px;
+      color: #999;
+      font-size: 16px;
+      height: 100%;
+    }
+
+    .vh-lottery .lottery-info #lotterySubmit {
+      display: inline-block;
+      background: #F15C5C;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      height: 30px;
+      line-height: 30px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      width: 150px;
+    }
+
+     /*--------------中奖历史---------------*/
+     .vh-lottery-history {
+        display:none;
+      }
+      .lottery-history-tite{
+          width:100%;
+          height:40px;
+          line-height:40px;
+          text-align:center;
+          color:#999;
+          font-size:16px;
+      }
+      .vh-lottery-history .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+      }
+      .history-info{
+        padding: 10px 15px;
+        max-height: 300px;
+        overflow: auto;
+      }
+      .vh-lottery-history .lottery-item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+    /*--------------计时器---------------*/
+    .vh-timer-wrap {
+      position: fixed;
+      width: 260px;
+      height: 130px;
+      background: rgba(0, 0, 0, .7);
+      z-index: 999;
+      display: none;
+    }
+
+    .vh-timer {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 260px;
+      height: 128 px;
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .timer-header {
+      height: 44px;
+      line-height: 44px;
+      font-size: 14px;
+      border-top: 1px solid #e5e5e5;
+      border-bottom: 1px solid #e5e5e5;
+      color: #4e4e4e;
+      background-color: #f7f7f7;
+      text-align: center;
+      position: relative;
+    }
+
+    .timer-header img {
+      width: 13px;
+      height: 14px;
+      position: absolute;
+      right: 20px;
+      top: 16px;
+      cursor: pointer;
+    }
+
+    .timer-ul {
+      list-style-type: none;
+      background: #000;
+      border-radius: 4px;
+      height: 60px;
+      margin: 10px 20px;
+      padding: 0 0;
+      position: relative;
+    }
+
+    .timer-line {
+      position: absolute;
+      border-top: 2px solid #000;
+      top: 29px;
+      z-index: 999;
+      width: 100%;
+    }
+
+    .timer-li {
+      list-style-type: none;
+      display: inline-block;
+      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAABECAYAAADHsbZQAAAAAXNSR0IArs4c6QAABR5JREFUaEPtW81rG1cQn1kJO02xpBAVEtoc+gGlUHJILCnWh2PVbsAqTm3cEKix+08UEmhpQ3Jo+kf0UoghNNQtbhGYFkNLDDm10EJzaA+lObhgR5KDY/yhfWUlayW93bczb7WKZVPdpJ03v/nNx5t5q10EALh69f13hQmfI+JrABCyfuvhT1UI+BMNce3u3flv0TL+6ebThbW1ddze3u5hu+umISL09fVBPH5SHH/++BQWxi8/XF1dfb3nLXcx8PTpUw9x6EJub2dnp5Y2Qog2MYut20eWA1lOocexbl95A0cXv7+/v4rnz6XarW6xWL7QoCNAIgruRDuNKoWPgOBJoFMDnsX6I05Azgx1TNudrcooZbIqYsXAx8HzFwSV005cFRPJEO6mQNSUF36NgMyfaV7XUlwH35VA1yzrguI6geb+6A5B5SJlGFe/qkY88HFw0EohBYIjlvtyUm43G5lulTaY+8fHxOCQjUrBU4FQOZrbAP3gtxGgMqEXrx8BAokhuQ1YM+u+sxVB5e5zvuX4+JiwCDiGMS6yblL52GbqpwAlECYSaVsrXYTuEwN3wiD2HOVu7mUXJlsI6PqzF+TrBLjDV1Ahkpl3gI/JZDOFaI/67QS0Zp6EEx+TyQzVP3i6D0gKU8mMPBhoHxC5exa32HUOqJhKZVz6gDzXB+Re3VxvwHrkCKbT6VdNE/NC4GcAIl5bw3VpQLwcaih8gWsGwkcYMn+0fZJIZF8JGfCrABhQM/CbBLrrPOU3QiFxbmVl5S9Hi0ulsrcA4OOgHdvpcUBqn7cePPj5E7kp1r6n0/lps7p7T5V6VBvwTZx7HLBu3IaN6fv3f/ralcDo6Pjk5uaTBd+GUAup3KbWA0AkMjC1tFT8xpXApUsTkxsbpQXlCY0BEIyIOukikRNTS0uLXALBmENr4YcmEompCYyPT0yWSuUF+TgQVKsm7gHbPL3wPQnQnuo9CZ2u3XvWy0edmZm59wzD+KppaVC9328ncOKbZvXKnTtf2lt9m4RVA+VypXvbaAAxjMWiU8WiYheiCFBF2LiuHG+pzYbYLSz90ShBoFLpfgQoHl6BOiACVA3wc8uTQKEwMV0uV+553cbgQ+nM5fyYRKMDV4rF79yLuFC4fKNcrnzqMJI6CqtYcddRAWrRE41EbhaLi7aN9qXZ2dmXHz9+8kupXIpyvUxNp6q7xnaxc4Fa5E7EYhvRaPzs/PwXf9fOA3Nzcy8ChMZ2d6u3Hz3655Rpmj7UPrslhmHAmTMv/RsOhz8EqC7jzMwHYmtrC9bX12FvrypZEuhJyoOlXsMMhUPwQvwkHDv2HGAmM8Kf1bg53a2AuOBjJqtBoFuGdaDXkwDlcKqIZbv4oa6v5OBjNpsX9H0UXei6Ac4K0sv1pgPU+PsEKF8FNXVzGxZXDqCdAJUTfL3tHunWZoYWgZyVQof3UyOgm5mdOlR2Vyf4mMu91WIPFQzOvuA1xFE5qI9fJ8B1ATW0cUPjNwQu+Jgbbo3A4auFo0FAYxxvC5F+xrpHuBN8HG5LIYUq1WldNdg71EhUdU//Hvg4fHGUcmRPF8b/BA46PLUIONtA/Rfn35feRcglQ7WzxiDNwceLI2P036xcy/zK0YyUmi0Ce4fgnQEVgSqO5N/+TQjxpl/nHeQ6BPwd8/mxd0wBi55PFWlaSTUmTXUqcWEgTNSwLBIC8DYAvCGEsF9BUb0/AMrHLutY3PcAHOdA3qPKVRDwB6K4vrz8w/f/AfY+858GSMCxAAAAAElFTkSuQmCC);
+      background-size: 100%;
+      height: 52px;
+      width: 37px;
+      position: relative;
+      box-sizing: border-box;
+      margin: 4px;
+    }
+
+    .timer-li strong {
+      font-size: 38px;
+      position: absolute;
+      top: 0;
+      left: 6px;
+      font-family: Gilroy;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    .timer-li-maohao strong {
+      left: 12px;
+      top: -4px;
+    }
+
+    .timer-li-last {
+      margin: 4px 0;
+    }
+
+    .questionarie {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 500px;
+      height: 556px;
+      z-index: 990;
+      background-color: white;
+      transition: all 0.3s ease-in-out;
+      transform: translate(-50%, -50%);
+      font-size: 12px;
+      /* overflow-scrolling: touch; */
+      -webkit-overflow-scrolling: touch;
+      display: none;
+      overflow-y: scroll;
+    }
+
+    .mobile-question {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .questionarie .sign-content {
+      height: 556px;
+      overflow-y: scroll;
+    }
+
+    .marquee-label {
+      position: absolute;
+      top: 15%;
+      width: auto;
+      overflow: hidden;
+      color: #fff;
+      opacity: .3;
+      font-size: 20px;
+      white-space: nowrap;
+      z-index: 1011;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, .2);
+    }
+
+    .marquee-label.pos2 {
+      top: 15%;
+    }
+
+    .marquee-label.pos3 {
+      top: 50%;
+    }
+
+    .marquee-label.pos4 {
+      top: auto;
+      bottom: 15%;
+    }
+
+    .watermark-img {
+      max-width: 40px;
+      max-height: 40px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1011;
+    }
+
+    .watermark-img.mark1 {
+      top: 10px;
+      left: 10px;
+    }
+
+    .watermark-img.mark2 {
+      top: 10px;
+      left: auto;
+      right: 10px;
+    }
+
+    .watermark-img.mark4 {
+      top: auto;
+      bottom: 10px;
+      left: 10px;
+    }
+
+    .watermark-img.mark3 {
+      top: auto;
+      bottom: 10px;
+      left: auto;
+      right: 10px;
+    }
+
+    /*---------------踢出蒙层--------------*/
+    .mask {
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 200px;
+      font-size: 22px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      z-index: 1000;
+    }
+
+    .vh-toast {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      z-index: 200;
+      transform: translateX(-50%);
+      min-width: 120px;
+      min-height: 30px;
+      line-height: 30px;
+      text-align: center;
+      padding: 3px 15px;
+      border-radius: 10px;
+      background: #fbc4c4;
+      color: #f56c6c;
+      display: none;
+    }
+
+    .no_support {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .6);
+      text-align: center;
+      display: none;
+      padding-top: 15%;
+      z-index: 999;
+      color: #fff;
+    }</style><script src="VhallSDK.js"></script></head><body><div id="app"><div class="mask"></div><div class="vh-toast"></div><div class="app-pc"><div class="l-contain"><div class="demo-tool-tip">小助手</div><div class="vh-doc-control"><span class="doc-contorl-move">移动</span> <span class="doc-contorl-in">放大</span> <span class="doc-contorl-out">缩小</span> <span class="doc-contorl-reset">重置</span> <span class="doc-contorl-next">下一页</span> <span class="doc-contorl-prev">上一页</span></div><div class="demo-control"><div class="demo-h5-live"><span class="demo-btn-speed-list">倍速列表(回放)</span></div><div class="demo-h5-live"><input id="demoSetSpeed" placeholder="0.5, 1, 2"/><span class="demo-btn-set-speed">倍速(回放)</span></div><div class="demo-control-flash demo-h5-record"><span class="demo-btn-barrage-open">打开弹幕</span></div><div class="demo-control-flash demo-h5-record"><span class="demo-btn-barrage-close">关闭弹幕</span></div><span class="demo-btn-add-barrage demo-h5-record">发送弹幕</span> <span class="demo-btn-set-barrage-style demo-h5-record">设置弹幕样式</span> <span class="demo-control-definition">获取清晰度列表</span><div class="demo-control-flash"><select id="demoDefinitionVal"></select> <span class="demo-btn-definition">设置清晰度</span></div><span class="demo-btn-play">播放</span> <span class="demo-btn-pause">暂停</span><div class="demo-h5-live"><input id="demoSetRecordTime" placeholder="单位s"/><span class="demo-btn-set-record-time">设置回放开始时间</span></div><div style="width: 100%;"><input class="demo-btn-chat-live-page" placeholder="页码" style="display: inline-block;width: 70%;margin-left: 15%;"> <span class="demo-btn-chat-live" style="margin-left: 22px;">获取直播历史聊天消息</span></div><div style="width: 100%;"><input class="demo-btn-chat-live-page" placeholder="页码" style="display: inline-block;width: 70%;margin-left: 15%;"> <span class="demo-btn-rchat-live" style="margin-left: 22px;">获取回播历史聊天消息</span></div><span class="demo-btn-lottery-record demo-h5-record">获取活动中奖记录</span> <span class="demo-btn-quesAns-record">获取回放问答记录</span> <span class="demo-btn-quesAns-live">获取直播问答记录</span> <span class="demo-btn-announcement">获取历史公告记录</span> <span class="demo-btn-room-info">获取当期那活动状态</span> <span class="demo-btn-user-info">获取当前用户参会信息</span> <span class="demo-btn-user-info" id="sendCustomMsg">发送自定义消息</span> <span class="demo-btn-send-flash-ques" id="flashQuesBtn">发送flash问卷答案</span> <span class="demo-btn-destroy">销毁实例</span><div><input id="demoChangeName"/><span class="demo-btn-change-name">改昵称</span></div></div></div><div class="r-contain"><div class="video-container"><div class="video-wrap" id="video"></div><div class="remote-wrap"><div class="remove-cover"><img/> <span class="play-btn"><i class="remote-play-btn"></i></span></div><div class="remote-special" id="remoteStreamSpecial"></div><div class="remote-stream-host" id="remoteStreamHost"></div><div class="remote-more"></div></div></div><div class="menu-tab"><div class="menu-tab-item active"><span>聊天</span></div><div class="menu-tab-item"><span>公告</span></div><div class="menu-tab-item" id="qaname"><span name="qa">问答</span></div></div><div class="room-content"><div class="chat-content"></div><div class="notice-content"></div><div class="qa-content"></div></div><div class="room-interact"><div id="chatControl" class="msg-control"><div class="face-pannel"></div><div class="pic-tool"><span id="facePannel">表情</span></div><div class="send-msg chat-send-control"><input id="chatMsg" class="chat-msg" placeholder="请输入聊天内容"> <button class="chat-send-msg" id="sendMsg">发送</button></div><div class="send-msg qa-send-control"><input id="qaMsg" class="qa-msg" placeholder="请输入问答内容"> <button class="qa-send-msg" id="qaSendMsg">发送</button></div></div><div class="mobile-doc-control"><span class="mobile-doc-move">移动</span> <span class="mobile-doc-in">放大</span> <span class="mobile-doc-out">缩小</span> <span class="mobile-doc-reset">重置</span> <span class="mobile-doc-next">下一页</span> <span class="mobile-doc-prev">上一页</span></div></div></div><div class="sign-wrap"><div class="sign"><div class="sign-header">签到 <img class="sign-close" src="//cnstatic01.e.vhall.com/static/images/mobile/modal-close.png"></div><div class="vh-sign-content"><img class="sign-img" src="//cnstatic01.e.vhall.com/static/images/mobile/sign-icon.png"><div class="sign-title">主持人发起了签到</div><div class="sign-time">您还有<span class="sign-second">秒</span>钟签到时间</div><button class="sign-btn">签到</button></div></div></div><div class="vh-lottery-wrap"><div class="vh-lottery"><div class="lottery-header"></div><div class="lottery-info"><div class="info"><div><span>手机号</span><input id="lotteryPhone"></div><div><span>姓名</span><input id="lotteryName"></div><div><span>备注</span><input id="lotteryMark"></div></div><div class="lottery-submit"><button id="lotterySubmit">提交</button></div></div></div></div><div class="vh-lottery-history"><div class="vh-lottery"><div class="lottery-history-tite">中奖历史</div><span class="close lottery-history-close">X</span><div class="history-info"></div></div></div><div id="questionWrap" class="questionarie"></div><div class="vh-timer-wrap" id="timerDom"><div class="vh-timer"><div class="timer-header"><span id="timerTitle">超时，开始正向计时</span> <img class="timer-close" src="//cnstatic01.e.vhall.com/static/images/mobile/modal-close.png"></div><div class="timer-content"><ul class="timer-ul"><div class="timer-line"></div><li class="timer-li"><strong id="timerTenMon"></strong></li><li class="timer-li"><strong id="timerMon"></strong></li><li class="timer-li timer-li-maohao"><strong id="timerMaoHao">:</strong></li><li class="timer-li"><strong id="timerTenSec"></strong></li><li class="timer-li timer-li-last"><strong id="timerSec"></strong></li></ul></div></div></div></div><div class="no_support"><div>主办方设置了视频加密功能，</div><div>建议使用电脑最新版Chrome浏览器观看</div></div></div><script src="//cnstatic01.e.vhall.com/3rdlibs/jquery/1.11.2/jquery.min.js"></script><script>window.onload = function () {
+      // pc和mobile页面布局差异化
+      var _isPC = isPc()
+      var ua = navigator.userAgent.toLowerCase()
+      var toastTimer = null // toast timer
+      var environment = ''
+      var STATIC_URL = '//cnstatic01.e.vhall.com'
+      var IMG_HOST = '//t-alistatic01.e.vhall.com/upload'
+      var newLotteryInfo = []
+      // 签到用参数
+      var signParams = {
+        _openSignStatu: false, // 签到面板状态
+        _sign_timer: null,
+        _sign_id: '' // 签到id
+      }
+      // 问答开关状态
+      var _qa = {
+        status: false
+      }
+      // 抽奖
+      var lottery = {
+        id: ''
+      }
+      // 计时器
+      var timerParams = {
+        timerVisible: false,
+        status: 'kaishi',
+        is_all_show: false,
+        is_timeout: false,
+        shijian: 0,
+        beifenshijian: 60,
+        ten_mon: 0,
+        mon: 3,
+        ten_sec: 4,
+        sec: 0,
+        openTimer: false,
+        timer: null
+      }
+      var hostStream = null // 无延迟互动 主讲人视频流信息
+      var audienceStreams = [] // 无延迟活动 观众的其他身份上麦视频流
+      var specialStream = null
+      var playBtnStataus = false // 无延迟使用 兼容浏览器自动播放问题
+      var customRoleNameInfo = {
+        host_name: '主持人',
+        assistant_name: '助理',
+        guest_name: '嘉宾'
+      }
+      // pc和mobile页面结构区别设置
+      if (_isPC) {
+        $('#app').css('minWidth', '1200px')
+        $('.l-contain').append($('<div class="doc-wrap" id="docWrap"></div>'))
+        $('.demo-tool-tip').css('display', 'block')
+      } else {
+        $('.l-contain').css('display', 'none')
+        $('.r-contain').addClass('app-mobile')
+        $('.sign').addClass('mobile-sign')
+        $('.menu-tab').append($('<div class="menu-tab-item"><span>文档</span></div>'))
+        $('.app-mobile .room-content').append($('<div class="doc-wrap" id="docWrap"></div>'))
+        $('#facePannel').css('display', 'none')
+        $('.demo-control').css('display', 'none')
+      }
+      window.SDK = new VhallSDK({
+        app_key: getQueryString('app_key'),
+        signedat: getQueryString('signedat'),
+        sign: getQueryString('sign'),
+        roomid: getQueryString('id'),
+        account: getQueryString('account'),
+        email: getQueryString('email') ? decodeURIComponent(getQueryString('email')) : '', // 可选
+        username: getQueryString('username') || '',
+        videoContent: '#video',
+        docContent: '#docWrap',
+        questionarieContainer: '#questionWrap',
+        plugins: ['chat', 'doc', 'player', 'interactTools'],
+        x5_video_fullscreen: true, //非必填，启用腾讯Ｈ5全屏方式 true开启 默认false
+        x5_video_type: true, //非必填，启用腾讯Ｈ5同层播放器 true开启 默认false
+        password: getQueryString('password'), // 第三方k值或密码 TODO:新增选填 
+        record_id: getQueryString('record_id'), // 指定观看回放id TODO:新增选填
+        sign_type: getQueryString('sign_type') || 0 // 表示验签规则选择 0:md5 1:rsa TODO:新增必填
+      })
+
+
+      document.addEventListener('click', function () {
+        $('.questionarie').css('display', 'none')
+      }, false)
+      setTimeout(function () {
+        var url = SDK.config.common.pushstreamPubUrl
+        var _envIndex = 0
+        if (url) {
+          _envIndex = url.indexOf('t-')
+          if (_envIndex > -1) {
+            environment = 'test'
+            STATIC_URL = '//cnstatic01.e.vhall.com'
+            IMG_HOST = '//t-alistatic01.e.vhall.com/upload'
+          } else {
+            environment = 'prod'
+            STATIC_URL = '//cnstatic01.e.vhall.com'
+            IMG_HOST = '//cnstatic01.e.vhall.com/upload'
+          }
+        }
+        if (SDK.config.vss) {
+          if (_isPC) {
+            // 显示文档调试工具
+            STATIC_URL = '//cnstatic01.e.vhall.com'
+            IMG_HOST = '//t-alistatic01.e.vhall.com/upload'
+
+            $('#flashQuesBtn').css('display', 'none')
+          }
+        }
+      }, 1500)
+
+      /**********************************业务代码****************************************/
+      // 判断设备类型
+      function isPc(target) {
+        var userAgentInfo = navigator.userAgent
+        var Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"]
+        var flag = true
+        for (var v = 0; v < Agents.length; v++) {
+          (function (v) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+              flag = false;
+              return
+            }
+          })(v)
+        }
+        return flag
+      }
+      // 获取路径参数
+      function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURIComponent(r[2]);
+        return '';
+      }
+      // 聊天信息模板
+      function chatTemplate(type, msg) {
+        var data = msg.data,
+          context = msg.context,
+          _temp = '',
+          role = '',
+          avatar = ''
+        if (context.role_name == 1 || context.role_name == 'host') {
+          role = customRoleNameInfo.host_name
+        } else if (context.role_name == 3 || context.role_name == 'assistant') {
+          role = customRoleNameInfo.assistant_name
+        } else if (context.role_name == 4 || context.role_name == 'guest') {
+          role = customRoleNameInfo.guest_name
+        } else {
+          role = ''
+        }
+        if (context.avatar != '') {
+          avatar = context.avatar
+        } else {
+          avatar = STATIC_URL + '/static/images/watch/head50.png'
+        }
+        if (data.text_content && data.text_content.indexOf('***', 0) == 0 && context.role_name == 1) {
+          data.text_content = '@' + data.text_content.substring(3)
+        }
+        if (data.type == 'text') {
+          if (context.replyMsg && context.replyMsg.content&&!Array.isArray(context.replyMsg)) {
+            // 主持人回复
+            _temp = '<div class="chat-item"><div class="l-avatar"><img src="' + avatar +
+              '"/></div><div class="r-info"><div class="r-name-info"><span class="r-name">' + context.nick_name +
+              '</span><span class="r-role">' + role +
+              '</span></div><div class="r-content"><div class="r-info-quote">' + context.replyMsg.nickName + ' : ' +
+              context.replyMsg.content.text_content + '</div><div class="answer">' + data.text_content +
+              '</div></div></div></div>'
+          } else {
+            // 普通消息
+            _temp = '<div class="chat-item"><div class="l-avatar"><img src="' + avatar +
+              '"/></div><div class="r-info"><div class="r-name-info"><span class="r-name">' + context.nick_name +
+              '</span><span class="r-role">' + role + '</span></div><div class="r-content">' + data.text_content +
+              '</div></div></div>'
+          }
+        } else if (data.type == 'image') {
+          var imgs = ''
+          if (data.image_urls.length > 0) {
+            for (var i = 0; i < data.image_urls.length; i++) {
+              (function (i) {
+                if (data.image_urls[i].indexOf('webinars') == 0) {
+                  var picTemp = data.image_urls[i].replace('webinars', IMG_HOST + '/webinars')
+                  imgs += '<img  src="' + picTemp + '"/>'
+                } else if (data.image_urls[i].indexOf('http') > -1 || data.image_urls[i].indexOf('https') > -1) {
+                  imgs = imgs + '<img  src="' + data.image_urls[i] + '"/>'
+                } else if ((data.image_urls[i].indexOf('http') < 0 && data.image_urls[i].indexOf('https') < 0) &&
+                  data.image_urls[i].indexOf('//') < 0) {
+                  imgs = imgs + '<img  src="//' + data.image_urls[i] + '"/>'
+                } else {
+                  imgs = imgs + '<img  src="' + data.image_urls[i] + '"/>'
+                }
+                return imgs
+              })(i)
+            }
+          }
+          var text = ''
+          if (data.text_content) {
+            text = data.text_content
+          }
+          _temp = '<div class="chat-item"><div class="l-avatar"><img src="' + avatar +
+            '"/></div><div class="r-info"><div class="r-name-info"><span class="r-name">' + context.nick_name +
+            '</span><span class="r-role">' + role + '</span></div><div class="r-content">' + text +
+            '</div><div class="r-content-iamge">' + imgs + '</div></div></div>'
+        }
+        if (type == 'live') {
+          console.log(_temp, '----_temp----itc--');
+          $('.chat-content').append(_temp)
+        } else {
+          // 历史记录反转插入
+          $('.chat-content').prepend(_temp)
+        }
+        document.querySelector('.chat-content').scrollTop = document.querySelector('.chat-content').scrollHeight
+      }
+      // 控制表情请面板以及选择表情
+      function handleFacesData(data) {
+        var _temp = ''
+        if (data.length > 0) {
+          for (var i = 0; i < data.length; i++) {
+            (function (i) {
+              var img = '<img src="' + data[i].src + '" class="faceImage" def="' + data[i].name + '"/>'
+              _temp += img
+            })(i)
+          }
+        }
+        $('.face-pannel').html(_temp)
+        $('.msg-control .face-pannel img').click(function (e) {
+          if (_qa.status && $(".menu-tab-item.active span").text() == '问答') {
+            var val = $('#qaMsg').val()
+            $('#qaMsg').val(val + e.target.getAttribute('def'))
+          } else {
+            var inner = $('#chatMsg').val()
+            $('#chatMsg').val(inner + e.target.getAttribute('def'))
+          }
+          $('.face-pannel').css('display', 'none')
+        })
+      }
+      // 展示公告
+      function handleAnnouncement(val) {
+        var time = ''
+        var text = ''
+        if (val.data) {
+          time = val.data.push_time
+          text = val.data.room_announcement_text
+        } else {
+          time = val.publish_release_time
+          text = val.content
+        }
+        var _temp = '<div class="notice-item"><div class="notice-title">【公告】</div><div class="notice-text">' + text +
+          '</div><div class="notice-time">' + time + '</div></div>'
+        $('.notice-content').append(_temp)
+        $('.notice-content').scrollTop($(this).height())
+      }
+      // 签到
+      function handleSignIn(val) {
+        var data = null
+        if (val.data) {
+          data = val.data
+        } else {
+          data = val
+        }
+        var showTime = Number(data.sign_show_time)
+        signParams._sign_id = data.sign_id
+
+        if (!signParams._openSignStatu) {
+          if (signParams._sign_timer) {
+            clearInterval(signParams._sign_timer)
+          }
+          signParams._sign_timer = null
+          $('.sign-wrap').css('display', 'block')
+          signParams._openSignStatu = true
+        }
+        signParams._sign_timer = setInterval(function () {
+          if (showTime >= 0) {
+            $('.sign-second').text(showTime + '秒')
+            showTime--
+          } else {
+            clearInterval(signParams._sign_timer)
+            $('.sign-wrap').css('display', 'none')
+            signParams._sign_timer = null
+            signParams._sign_id = ''
+            signParams._openSignStatu = false
+          }
+        }, 1000)
+      }
+      /**********************************消息监听****************************************/
+      SDK.$on('vhallplay_LAG_REPORT', function () {
+        // 视频卡顿
+      })
+      SDK.$on('vhallplay_LAG_RECOVER', function () {
+        // 卡顿恢复
+      })
+      SDK.$on('vhallplay_AUTOPLAY_FAILED', function (e) {
+        // 自动播放失败
+        console.log(e)
+      })
+      SDK.$on('vhallplay_ERROR', function (e) {
+        // 播放器出错
+        console.log(e)
+      })
+      SDK.$on('vhallplay_EXITFULLSCREEN', function () {
+        // 播放器退出全屏
+        console.log('demo:vhallplay_EXITFULLSCREEN>>>>>>>')
+      })
+      SDK.$on('vhallplay_IS_FULL_SCREEN', function (status) {
+        // 播放器是否是全屏
+        // status: true 全屏状态, false：非全屏状态
+        console.log('demo:vhallplay_IS_FULL_SCREEN>>>>>>>')
+      })
+      SDK.$on('vhallplay_PLAY', function () {
+        // 播放器播放
+        console.log('demo:vhallplay_PLAY>>>>>>>')
+      })
+      SDK.$on('vhallplay_PAUSE', function () {
+        // 播放器暂停
+        console.log('demo:vhallplay_PAUSE>>>>>>>')
+      })
+      SDK.$on('vhallplay_FULLSCREEN_CHANGE', function (status) {
+        // 播放器切换全屏状态
+        // status = normal 当前为未全屏状态
+        console.log('demo:vhallplay_FULLSCREEN_CHANGE>>>>>>>', status)
+      })
+
+      // 播放器初始化成功
+      SDK.$on('playerReady', function () {
+        console.log(1)
+        console.log('demo:playerReady>>>>>>>')
+        // 区分h5和flash控件
+        setTimeout(function () {
+          if (!SDK.config.vss) {
+            $('.demo-control-flash').css('display', 'none')
+            $('.mobile-doc-control').css('display', 'none')
+            $('.demo-h5-record').css('display', 'none')
+          } else {
+            $('.l-contain .vh-doc-control').css('display', 'block')
+            if (SDK.config.common.webinarStatus == 1) {
+              $('.demo-h5-live').css('display', 'none')
+            } else {
+              $('.demo-h5-record').css('display', 'none')
+            }
+          }
+        }, 2000)
+
+        var showControllerTimer = null,
+          showStatu = false,
+          videoContent = document.getElementById('video')
+
+        /**
+         * 
+         * 处理播放器进度条显示逻辑
+         * 4s自动隐藏
+         * 
+         * */
+        setTimeout(function () {
+          var dom = document.querySelector('.vh-player-controller')
+
+          if (videoContent && dom && _isPC) {
+            videoContent.addEventListener('mousemove', function () {
+              if (dom) {
+                dom.style.display = 'block'
+              }
+              if (showControllerTimer) {
+                clearTimeout(showControllerTimer)
+              }
+              showControllerTimer = setTimeout(function () {
+                dom.style.display = 'none'
+              }, 4000)
+            }, false)
+
+          } else if (videoContent && dom && !_isPC) {
+            videoContent.addEventListener('touchstart', function () {
+              if (dom) {
+                dom.style.display = 'block'
+              }
+              if (showControllerTimer) {
+                clearTimeout(showControllerTimer)
+              }
+              showControllerTimer = setTimeout(function () {
+                dom.style.display = 'none'
+              }, 4000)
+            }, false)
+          }
+          /**
+           * 初始化后第一次隐藏进度条
+           */
+
+          setTimeout(function () {
+            dom && (dom.style.display = 'none')
+          }, 4000)
+        }, 300)
+        // 移动端设置回放开始时间
+        if (SDK.config.common.webinarStatus != 1 && !_isPC) {
+          setRecordTime(30)
+        }
+      })
+
+      // 推流成功
+      SDK.$on('publishStart', function () {
+        console.log('demo:publishStart>>>>>>>')
+        $('.mask').css('display', 'none')
+        $('.mask').html('')
+      })
+      // 停止推流
+      SDK.$on('streamOver', function () {
+        console.log('demo:streamOver>>>>>>>')
+        $('.mask').css('display', 'block')
+        $('.mask').html('直播结束')
+      })
+      // H5开播
+      SDK.$on('live_start', function () {
+        console.log('demo:live_start>>>>>>>')
+        $('.mask').css('display', 'none')
+        $('.mask').html('')
+      })
+      // H5停播
+      SDK.$on('live_over', function () {
+        console.log('demo:live_over>>>>>>>')
+        $('.mask').css('display', 'block')
+        $('.mask').html('直播结束')
+        var no_delay_webinar = SDK.config.common.no_delay_webinar
+        var webinarStatus = SDK.config.common.webinarStatus // 1 直播
+        if (no_delay_webinar == 1 && webinarStatus == 1) { //无延时直播
+          SDK.interact.destroyInstance()
+        }
+
+      })
+      // 监听发送自定义消息
+      SDK.$on('sendCustomEvent', function (msg) {
+        console.log('demo:sendCustomEvent>>>>>>', msg)
+      })
+      // 监听自定义消息
+      SDK.$on('customEvent', function (msg) {
+        console.log('demo:customEvent>>>>>>', msg)
+      })
+      // 监听用户更新信息
+      SDK.$on('UpdateUser', function (msg) {
+        console.log('demo-updateUser>>>', msg)
+      })
+      // 监听修改自定义角色名称
+      SDK.$on('UpdateRoleName', function (msg) {
+        console.log('demo:UpdateRoleName', msg)
+        if (msg.host_name) {
+          customRoleNameInfo.host_name = msg.host_name || '主持人'
+        }
+        if (msg.assistant_name) {
+          customRoleNameInfo.assistant_name = msg.assistant_name || '助理'
+        }
+        if (msg.guest_name) {
+          customRoleNameInfo.guest_name = msg.guest_name || '嘉宾'
+        }
+      })
+      // 监听用户上线
+      SDK.$on('userOnline', function (msg) {
+        console.log('demo:userOnline>>>>>>>', msg)
+      })
+      // 监听用户下线
+      SDK.$on('userOffline', function (msg) {
+        console.log('demo:userOffline>>>>>>>', msg)
+      })
+      // 监听聊天消息
+      SDK.$on('chatMsg', function (msg) {
+        console.log('demo-chatMsg>>>--------itc', msg)
+        chatTemplate('live', msg)
+      })
+      // 禁言消息
+      SDK.$on('disableChat', function (msg) {
+        console.log('demo:disableChat', msg)
+        $('#chatMsg').attr('placeholder', '您已被禁言')
+        $('#qaMsg').attr('placeholder', '您已被禁言')
+        $('#chatMsg').attr('disabled', 'disabled')
+        $('#qaMsg').attr('disabled', 'disabled')
+        $('#qaSendMsg').attr('disabled', 'disabled')
+        $('#sendMsg').attr('disabled', 'disabled')
+      })
+      // 取消禁言
+      SDK.$on('permitChat', function (msg) {
+        console.log('demo:permitChat', msg)
+        $('#qaMsg').attr('placeholder', '请输入问答内容')
+        $('#chatMsg').attr('placeholder', '请输入内容')
+        $('#chatMsg').removeAttr('disabled')
+        $('#sendMsg').removeAttr('disabled')
+        $('#qaMsg').removeAttr('disabled')
+        $('#qaSendMsg').removeAttr('disabled')
+      })
+      // 全体禁言及取消
+      SDK.$on('forbidChat', function (msg) {
+        console.log('demo:forbidChat', msg)
+        // status:1 全体禁言
+        if (msg.allStatus == 1) {
+          $('#chatMsg').attr('placeholder', '您已被禁言')
+          if (msg.data.qa_status == 1) {
+            $('#qaMsg').attr('disabled', 'disabled')
+            $('#qaMsg').attr('placeholder', '您已被禁言')
+          } else {
+            $('#qaMsg').removeAttr('disabled')
+            $('#qaMsg').attr('placeholder', '请输入问答内容')
+            $('#qaSendMsg').removeAttr('disabled')
+          }
+
+          $('#chatMsg').attr('disabled', 'disabled')
+
+          $('#sendMsg').attr('disabled', 'disabled')
+        } else {
+          $('#qaMsg').attr('placeholder', '请输入问答内容')
+          $('#chatMsg').attr('placeholder', '请输入内容')
+          $('#chatMsg').removeAttr('disabled')
+          $('#sendMsg').removeAttr('disabled')
+          $('#qaMsg').removeAttr('disabled')
+          $('#qaSendMsg').removeAttr('disabled')
+        }
+      })
+      // 踢出消息
+      SDK.$on('kickout', function (data) {
+        console.log('demo:kickout', data)
+        $('.mask').css('display', 'block')
+        $('.mask').html('您已被踢出')
+      })
+      // 取消踢出消息
+      SDK.$on('kickoutrestore', function (data) {
+        console.log('demo:kickoutrestore', data)
+        $('.mask').css('display', 'none')
+        $('.mask').html('')
+      })
+      // 收到公告消息
+      SDK.$on('room_announcement', function (data) {
+        console.log('demo:room_announcement', data)
+        handleAnnouncement(data)
+      })
+      // 开始签到
+      SDK.$on('startSign', function (data) {
+        console.log('demo:startSign', data)
+        // 此处理应对主播设置自动签到
+        $('.sign-wrap').css('display', 'none')
+        clearInterval(signParams._sign_timer)
+        signParams._sign_timer = null
+        signParams._sign_id = ''
+        signParams._openSignStatu = false
+        $('.sign-second').text('0秒')
+        handleSignIn(data)
+      })
+      // 签到结束
+      SDK.$on('endSign', function (data) {
+        console.log('demo:endSign', data)
+        $('.sign-wrap').css('display', 'none')
+        clearInterval(signParams._sign_timer)
+        signParams._sign_timer = null
+        signParams._sign_id = ''
+        signParams._openSignStatu = false
+        $('.sign-second').text('0秒')
+      })
+      // 发送签到消息监听
+      SDK.$on('sendSign', function (data) {
+        console.log('demo:sendSign', data)
+        clearInterval(signParams._sign_timer)
+        $('.sign-wrap').css('display', 'none')
+        $('.sign-second').text('秒')
+        signParams._sign_timer = null
+        signParams._sign_id = ''
+        signParams._openSignStatu = false
+      })
+      // 获取当前活动最近一个问卷
+      SDK.$on('questionarie_last_info', function (data) {
+        console.log('demo-questionLastInfo', data)
+        if (!data) return
+        setTimeout(function () {
+          SDK.$emit('openQuestion', {
+            data: {
+              questionnaire_id: data.questionId
+            }
+          })
+          $('.questionarie').css('display', 'block')
+          if (!_isPC) {
+            $('.questionarie').addClass("mobile-question")
+          }
+        }, 8000)
+      })
+      // 收到问卷消息: 包含问卷id
+      SDK.$on('questionnaire_push', function (data) {
+        console.log('demo-questionairePush>>>>', data)
+        $('.questionarie').css('display', 'block')
+        if (!_isPC) {
+          $('.questionarie').addClass("mobile-question")
+        }
+      })
+      // 问卷提交成功
+      SDK.$on('questionarie_submit_success', function (data) {
+        console.log('demo-questionarieSubmitSuccess>>>', data)
+        $('.questionarie').css('display', 'none')
+      })
+      // 问卷提交报错
+      SDK.$on('questionarie_submit_error', function (data) {
+        console.log('demo-questionarieSubmitError>>>', data)
+      })
+      // 获取问卷列表
+      SDK.$on('questionPagerList', function (data) {
+        console.log('demo-getQuestionariePagerList>>>', data)
+      })
+      // 开启问答
+      SDK.$on('question_answer_open', function (data) {
+        console.log('demo-questionAnswerOpen>>>', data)
+        handleQuestionAnswerSwitch('open')
+        $("#qaname").html(`<span name="qa">${data.data.name?data.data.name:'问答'}</span>`)
+      })
+      SDK.$on('question_answer_set', function (data) {
+        $("#qaname").html(`<span name="qa">${data.data.name}</span>`)
+      })
+      // 关闭问答
+      SDK.$on('question_answer_close', function (data) {
+        console.log('demo-questionAnswerClose>>>', data)
+        handleQuestionAnswerSwitch('close')
+      })
+      // 发送问答
+      SDK.$on('question_answer_create', function (msg) {
+        // 回显
+        console.log('demo-questionAnswerCreate>>>', msg)
+        handleQuestionAnswerMsg(msg)
+      })
+      // 问答回复
+      SDK.$on('question_answer_commit', function (data) {
+        console.log('demo-questionAnswercommit>>>', data)
+        handleQAndACommit(data)
+      })
+      // 主讲人删除问答回答
+      SDK.$on('question_answer_backout', function (data) {
+        console.log('demo-questionAnswerBackout>>>', data)
+        handleDeleteAnswer(data)
+      })
+      // 获取历史问答数据
+      SDK.$on('getQuestionList', function (data) {
+        console.log('demo-getQuestionList>>>', data)
+      })
+      // 开始抽奖
+      SDK.$on('lotteryStart', function (data) {
+        console.log('demo-startLottery>>>', data)
+        handleStartLottery(data)
+      })
+      // 结束抽奖
+      SDK.$on('lotteryResultNotice', function (data) {
+        console.log('demo-lotteryResultNotice>>>', data)
+        handleEndLottery(data)
+      })
+      // 监听主持人下线消息
+      SDK.$on('hostNotice', function () {
+        console.log('demo-主持人下线')
+      })
+
+      SDK.$on('DocOpenStatus', function (data) {
+        console.log('demo-DocOpenStatus>>>', data)
+      })
+      SDK.$on('DocAndWhiteStatus', function (data) {
+        console.log('demo-DocAndWhiteStatus>>>', data)
+      })
+      // 在线人数和虚拟人数
+      SDK.$on('onlinePopulation', function (data) {
+        console.log('demo-pvAndUv', data)
+      })
+      // 不支持加密视频播放
+      SDK.$on('noSupportVideo', (function (msg) {
+        console.log('不支持加密视频播放>>>');
+        document.getElementsByClassName('no_support')[0].style.display = 'block';
+      }))
+      // 错误日志统一对外
+      SDK.$on('error', (function (msg) {
+        console.log("demo-error>>>>>>",msg.type + '，' + msg.data)
+        handleChangeToast('错误code：' + msg.type + '，' + msg.data)
+      }))
+
+
+      /**********************************计时器****************************************/
+      // 计时器初始化
+      SDK.$on('timer_info_init', function (timerRes) {
+        console.log('demo-timer_info_init初始化完成获取计时器信息>>>', timerRes)
+        initTimerInfo(timerRes)
+      })
+      // 计时器开始
+      SDK.$on('timer_start', function (timerRes) {
+        console.log('demo-timer_start计时器开始>>>', timerRes)
+        timerParams.shijian = timerRes.data.duration
+        timerParams.beifenshijian = timerRes.data.duration
+        timerParams.is_timeout = timerRes.data.is_timeout
+        timerParams.is_all_show = timerRes.data.is_all_show
+        // 变化文字
+        timerTextChange()
+        timeFormat(timerParams.shijian)
+        timerFun(timerRes.data.duration)
+        handleTimer()
+        // 打开计时器组件
+        timerParams.status = 'kaishi';
+        timerParams.timerVisible = true;
+        if (timerParams.is_all_show == 1) {
+          timerParams.openTimer = true;
+          // 展示计时器弹出框
+          $('.vh-timer-wrap').css('display', 'block')
+        }
+      })
+      // 计时器结束
+      SDK.$on('timer_end', function (data) {
+        console.log('demo-timer_end计时器结束>>>', data)
+        $('.vh-timer-wrap').css('display', 'none')
+        timerParams.openTimer = false;
+        timerParams.timerVisible = false;
+        timerParams.status = 'jieshu';
+        if (timerParams.timer) {
+          clearInterval(timerParams.timer)
+          timerParams.timer = null
+        }
+      })
+      // 计时器暂停
+      SDK.$on('timer_pause', function (data) {
+        console.log('demo-timer_pause计时器暂停>>>', data)
+        timerParams.status = 'zanting';
+        // 变化文字
+        timerTextChange()
+        timeFormat(Math.abs(data.data.remain_time))
+        if (timerParams.timer) {
+          clearInterval(timerParams.timer)
+          timerParams.timer = null
+        }
+      })
+      // 计时器重置
+      SDK.$on('timer_reset', function (data) {
+        console.log('demo-timer_reset计时器重置>>>', data)
+        $('.vh-timer-wrap').css('display', 'none')
+        if (timerParams.timer) {
+          clearInterval(timerParams.timer)
+          timerParams.timer = null
+        }
+        timerParams.status = 'kaishi'
+        timerParams.openTimer = false
+      })
+      // 计时器继续
+      SDK.$on('timer_resume', function (data) {
+        console.log('demo-timer_resume计时器继续>>>', data)
+        timerParams.status = 'kaishi';
+        timerFun(data.data.remain_time);
+      })
+      /**********************************互动订阅相关****************************************/
+      // 互动sdk初始化成功
+      SDK.$on('interactReady', (function (data) {
+        console.log('demo-interactReady', data)
+        console.log('demo-初始化互动sdk成功', SDK)
+        var no_delay_webinar = SDK.config.common.no_delay_webinar
+        var webinarStatus = SDK.config.common.webinarStatus // 1 直播
+        var layout = SDK.config.common.layout // 新系统规则：1-音频、2-视频、3-互动 活动封面 。备注： 新1音频 为老2音频， 新2视频 为老3视频加文档
+        var webinarImg = SDK.config.common.webinarImg
+        // 无延迟活动
+        if (no_delay_webinar == 1 && webinarStatus == 1) {
+          $('#video').css('display', 'none')
+          $('.remote-wrap').css('display', 'block')
+          $('.demo-control-definition').css('display', 'none')
+          $('.demo-btn-definition').css('display', 'none')
+          $('.demo-btn-play').css('display', 'none')
+          $('.demo-btn-pause').css('display', 'none')
+          $('.demo-btn-barrage-open').css('display', 'none')
+          $('.demo-btn-barrage-close').css('display', 'none')
+          $('.demo-btn-set-barrage-style').css('display', 'none')
+          $('.remove-cover img').attr('src', webinarImg)
+
+          $('.remote-play-btn').click(function () {
+            playBtnStataus = true
+            if (SDK.config.common.layout == 2) {
+              const imgStr = '<img src=' + webinarImg + ' class="audio-cover" />'
+              $('#remoteStreamHost').append(imgStr)
+            }
+            $('.remove-cover').css('display', 'none')
+            var videos = $('.remote-wrap').find('video')
+            var audios = $('.remote-wrap').find('audio')
+            if (videos.length > 0) {
+              for (var i = 0; i < videos.length; i++) {
+                videos[i].play()
+              }
+            }
+            if (audios.length > 0) {
+              for (var j = 0; j < audios.length; j++) {
+                audios[j].play()
+              }
+            }
+
+          })
+          handleRemoteStreams(data)
+        }
+      }))
+
+      function handleRemoteStreams(data) {
+        /**
+         * members: 包含 主播 特殊角色 上麦观众三种远程视频流
+         * special: 包含 桌面共享 插播两种特殊远程流
+         * streamType=2 members中视频流
+         * streamType=3 桌面共享视频流
+         * streamType=4 插播视频流
+         */
+        var membersStream = data.members
+        if (membersStream.length > 0) {
+          for (var i = 0; i < membersStream.length; i++) {
+            // 处理主播视频
+            if (membersStream[i].attributes.role == 1) {
+              if (!hostStream || (hostStream && hostStream.streamId != membersStream[i].streamId)) {
+                $('#remoteStreamHost').html('')
+                hostStream = membersStream[i]
+                SDK.interact.subscribe(hostStream.streamId, 'remoteStreamHost')
+              }
+            } else {
+              // 处理普通观众
+              audienceStreams.push(membersStream[i])
+            }
+          }
+        }
+        if (audienceStreams.length > 0) {
+          var wrap = document.querySelector('.remote-wrap')
+          if (_isPC) {
+            $('.remote-stream-host').css('height', '150px')
+            $('.remote-stream-host').css('width', (16 * 150 / 9) + 'px')
+          } else {
+            var height = wrap.clientHeight
+            console.log('7878', height)
+            $('.remote-stream-host').css('height', height - 60 + 'px')
+            $('.remote-stream-host').css('width', (16 * (height - 60) / 9) + 'px')
+          }
+
+          $('.remote-more').css('display', 'block')
+          for (var j = 0; j < audienceStreams.length; j++) {
+            var remoteStream = document.createElement('div')
+            remoteStream.classList.add('remote-more-item')
+            remoteStream.setAttribute('id', 'remoteStream' + j)
+            if (SDK.config.common.no_delay_webinar == 1 && SDK.config.common.webinarStatus == 1) {
+              $('.remote-more').append(remoteStream)
+              $('.remote-more-item').css('width', ((wrap.clientWidth / 5) - 8) + 'px')
+            } else {
+              $('.remote-more-item').css('width', (16 * 50 / 9) + 'px')
+              $('.remote-more').append(remoteStream)
+            }
+            SDK.interact.subscribe(audienceStreams[j].streamId, 'remoteStream' + j)
+          }
+        } else {
+          $('.remote-more').css('display', 'none')
+          $('.remote-stream-host').css('height', '100%')
+          $('.remote-stream-host').css('width', '100%')
+        }
+        if (data.special) {
+          specialStream = null
+          $('#remoteStreamSpecial').html('')
+          $('.remote-special').css('display', 'block')
+          specialStream = data.special
+          SDK.interact.subscribe(specialStream.streamId, 'remoteStreamSpecial')
+        }
+
+      }
+      // 当前互动远端流信息
+      SDK.$on('remoteAddStream', (function (data) {
+        console.log('demo-addRemoteStream>>>', data)
+        var stream = data.streamInfo
+        if (stream.streamType == 3 || stream.streamType == 4) {
+          $('#remoteStreamSpecial').html('')
+          $('.remote-special').css('display', 'block')
+          specialStream = stream
+          SDK.interact.subscribe(specialStream.streamId, 'remoteStreamSpecial')
+        } else if (stream.streamType == 2) {
+          if (stream.attributes && stream.attributes.role == 1) {
+            SDK.interact.subscribe(stream.streamId, 'remoteStreamHost')
+          } else {
+            var wrap = document.querySelector('.remote-wrap')
+            var len = audienceStreams.length
+            if (!len) {
+              $('.remote-more').css('display', 'block')
+              var height = wrap.clientHeight
+              $('.remote-stream-host').css('height', height - 60 + 'px')
+              $('.remote-stream-host').css('width', (16 * (height - 60) / 9) + 'px')
+            }
+            audienceStreams.push(stream)
+            var remoteStream = document.createElement('div')
+            remoteStream.classList.add('remote-more-item')
+            remoteStream.setAttribute('id', 'remoteStream' + len)
+            if (SDK.config.common.no_delay_webinar == 1 && SDK.config.common.webinarStatus == 1) {
+              $('.remote-more').append(remoteStream)
+              $('.remote-more-item').css('width', ((wrap.clientWidth / 5) - 8) + 'px')
+            } else {
+              $('.remote-more-item').css('width', (16 * 50 / 9) + 'px')
+              $('.remote-more').append(remoteStream)
+            }
+            SDK.interact.subscribe(stream.streamId, 'remoteStream' + len)
+          }
+        }
+        var videos = $('.remote-wrap').find('video')
+        var audios = $('.remote-wrap').find('audio')
+        if (videos.length > 0) {
+          for (var i = 0; i < videos.length; i++) {
+            if (playBtnStataus) {
+              videos[i].play()
+            } else {
+              videos[i].pause()
+            }
+          }
+        }
+        if (audios.length > 0) {
+          for (var j = 0; j < audios.length; j++) {
+            if (playBtnStataus) {
+              audios[i].play()
+            } else {
+              audios[i].pause()
+            }
+          }
+        }
+      }))
+      SDK.$on('remoteRemoveStream', (function (data) {
+        console.log('demo-remoteRemoveStream>>>', data)
+        var type = data.type
+        var id = data.id
+        if (type == 3 || type == 4) {
+          specialStream = null
+          $('#remoteStreamSpecial').html('')
+          $('#remoteStreamSpecial').css('display', 'none')
+        } else {
+          if (hostStream && data.id == hostStream.streamId) {
+            $('#remoteStreamHost').html('')
+            return
+          }
+          for (var i = 0; i < audienceStreams.length; i++) {
+            if (audienceStreams[i].streamId == id && audienceStreams[i].attributes.role != 1) {
+              audienceStreams.splice(i, 1)
+              console.log('>>>>>>>>>>>>>', i, '#remoteStream' + i)
+              $('#remoteStream' + i).remove()
+              break;
+            }
+          }
+          if (!audienceStreams.length) {
+            $('.remote-stream-host').css('width', '100%')
+            $('.remote-stream-host').css('height', '100%')
+            $('.remote-more').css('display', 'none')
+          }
+        }
+      }))
+      // 互动sdk实例销毁成功
+      SDK.$on('destroyInteractSuccess', (function () {
+        $('.remote-special').html('')
+        $('.remote-stream-host').html('')
+        $('.remote-more').html('')
+        console.log('demo-互动sdk实例销毁成功')
+      }))
+      // 远端流摄像头--禁用
+      SDK.$on('vrtc_frames_forbid', (function (data) {
+        console.log('demo-vrtc_frames_forbid>>>', data)
+      }))
+      // 远端流摄像头--开启
+      SDK.$on('vrtc_frames_display', (function (data) {
+        console.log('demo-远端流摄像头--开启>>>', data)
+      }))
+      // 远端流麦克风--禁用
+      SDK.$on('vrtc_mute', (function (data) {
+        console.log('demo-远端流麦克风--禁用>>>', data)
+      }))
+      // 远端流麦克风--开启
+      SDK.$on('vrtc_mute_cancel', (function (data) {
+        console.log('demo-远端流麦克风--开启>>>', data)
+      }))
+      // 主讲人--设为主讲人
+      SDK.$on('vrtc_big_screen_set', (function (data) {
+        console.log('demo-vrtc_big_screen_set设为主讲人>>>', data)
+      }))
+      // 主讲人--设置主屏
+      SDK.$on('vrtc_speaker_switch', (function (data) {
+        console.log('demo-vrtc_speaker_switch设置主屏>>>', data)
+      }))
+      // 主讲人-- 下麦某人
+      SDK.$on('vrtc_disconnect_success', (function (data) {
+        console.log('demo-vrtc_disconnect_success下麦某人>>>', data)
+      }))
+      /**********************************错误提示****************************************/
+      function handleChangeToast(data) {
+        if (toastTimer) clearTimeout(toastTimer)
+        $('.vh-toast').css('display', 'block')
+        $('.vh-toast').html(data)
+        toastTimer = setTimeout(function () {
+          $('.vh-toast').css('display', 'none')
+        }, 2000)
+      }
+      /**********************************获取房间信息****************************************/
+      // 获取房间信息
+      function getRoomInfo() {
+        // H5获取third_party_user_id 抽奖时使用
+        SDK.getRoominfo().then(function (res) {})
+          .catch(function (e) {})
+      }
+      // 获取当前用户参会信息
+      function getUserInfo() {
+        SDK.getUserinfo().then(function (res) {
+          console.log('demo-getUserInfo>>>', res)
+        })
+      }
+      // 更新当前用户昵称
+      function updateUserInfo(val) {
+        SDK.updateUserInfo(val)
+      }
+      /**********************************视频相关操作****************************************/
+      /**
+       * @params val 速度值：【0.5, 1, 2】具体根据当前倍速列表值设置
+       */
+      function setPlaySpeed(val) {
+        SDK.player.setSpeed(val)
+      }
+      // 获取当前可支持的倍速列表
+      function getSpeedList() {
+        SDK.player.getSpeedList(function (data) {
+          console.log('demo-获取当前倍速列表>>>>', data)
+        })
+      }
+      // 打开弹幕
+      function openBarrage() {
+        SDK.player.openBarrage()
+      }
+      // 关闭弹幕
+      function closeBarrage() {
+        SDK.player.closeBarrage()
+      }
+      // 发送弹幕
+      function sendBarrage(val) {
+        SDK.player.sendBarrage(val)
+      }
+      /**
+       * 设置弹幕样式
+       * @params opt = {
+       *  position: 0,     // 位置   int  0上    1中  2下  3全屏
+       *  alpha: 100,      // 透明度 int  0~100
+       *  fontsize: 15,    // 字体大小 int
+       *  color: "#000000"  // 颜色   string
+       * }
+       */
+      function setBarrageStyle(opt) {
+        SDK.player.setBarrageInfo(opt)
+      }
+      /*
+       *@params s: 设置秒数
+       *设置当前回放播放时间
+       *设置时机：在回放模式下，播放器初始化完成并且能获取到播放器总时间之后
+       */
+      function setRecordTime(s) {
+        SDK.player.setCurrentTime(s)
+      }
+      // 播放
+      function play() {
+        SDK.player.play()
+      }
+      // 暂停
+      function pause() {
+        SDK.player.pause()
+      }
+      // 获取播放器可播放清晰度
+      function getDefinition() {
+        SDK.player.canPlayDefinitions(function (val) {
+          console.log('demoGetCanPlayDefinitions>>>', val)
+          if (val.length > 0) {
+            var temp = ''
+            for (var i = 0; i < val.length; i++) {
+              (function (i) {
+                var definition = ''
+                if (val[i] == 'a') {
+                  definition = '音频'
+                } else if (val[i] == 'same') {
+                  definition = '原画'
+                } else {
+                  definition = val[i]
+                }
+                var str = '<option value=' + val[i] + '>' + definition + '</option>'
+                temp += str
+              })(i)
+            }
+            $('#demoDefinitionVal').html(temp)
+          }
+        })
+      }
+      /**
+       * 设置清晰度
+       * @params val :same 720px a等格式
+       * same：原画
+       * a: 音频
+       */
+      function setPlayerDefinition(val) {
+        // 根据sdk数组index传递
+        SDK.player.setPlayerDefinition(val)
+      }
+
+      // 播放器销毁
+      function destroy() {
+        SDK.chat.destroy()
+      }
+      /**********************************聊天相关操作****************************************/
+      // 发送聊天消息
+      function sendChatMsg() {
+        if ($('#chatMsg').val() == '') {
+          alert('请输入聊天内容')
+          return
+        } else if ($('#chatMsg').val().length > 140) {
+          alert('最多输入140个文字')
+          return
+        }
+        SDK.chat.sendChat($('#chatMsg').val().trim())
+        $('#chatMsg').val('')
+      }
+
+      // 发送自定义聊天消息
+      function sendCustomEvent() {
+        SDK.chat.sendCustomEvent({
+          type: 'custom_event_type',
+          data: {
+            id: 100,
+            name: 'nihao'
+          }
+        })
+      }
+      /**
+       * 获取直播聊天历史记录
+       * @params currPage 当前页
+       * @params pageSize 每页大小
+       * @params startTime '2020/07/13' 查询开始时间
+       * @params endTime '2020/07/13' 查询结束时间
+       */
+      function getLiveHistoryChatMsg(params) {
+        SDK.vhall_get_live_history_chat_msg(params)
+          .then(function (res) {
+            if (res.code == 200 && res.data) {
+              var data = res.data
+              console.log('获取聊天记录', res.data)
+              if (SDK.config.common.versionInfo == 'new') {
+                if (data.length > 0) {
+                  for (var j = 0; j < data.length; j++) {
+                    newChatTemplate(data[j])
+                  }
+                }
+                return
+              }
+              if (data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                  (function (i) {
+                    var msg = {
+                      data: {
+                        type: 'text',
+                        text_content: data[i].content
+                      },
+                      context: {
+                        role_name: data[i].role_name
+                      }
+                    }
+                    if (data[i].avatar) {
+                      msg.context.avatar = data[i].avatar
+                    } else {
+                      msg.context.avatar = data[i].content.avatar
+                    }
+                    if (data[i].nick_name) {
+                      msg.context.nick_name = data[i].nick_name
+                    } else {
+                      msg.context.nick_name = data[i].nickname
+                    }
+                    chatTemplate('history', msg)
+                  })(i)
+                }
+              }
+            }
+          })
+          .catch(function () {})
+      }
+
+      function newChatTemplate(data) {
+        var role_name = data.role_name,
+          avatar = data.avatar,
+          content = data.content,
+          nick_name = data.nick_name,
+          _temp = '',
+          role = '',
+          img_urls = data.img_urls,
+          imgs = ''
+
+        if (role_name == 1) {
+          role = customRoleNameInfo.host_name
+        } else if (role_name == 3) {
+          role = customRoleNameInfo.assistant_name
+        } else if (role_name == 4) {
+          role = customRoleNameInfo.guest_name
+        } else {
+          role = ''
+        }
+        if (avatar == '') {
+          avatar = STATIC_URL + '/static/images/watch/head50.png'
+        }
+        if (content && content.indexOf('***', 0) == 0 && role_name == 1) {
+          content = '@' + content.substring(3)
+        }
+
+
+        if (img_urls.length > 0) {
+          for (var i = 0; i < img_urls.length; i++) {
+            imgs += '<img  src="' + img_urls[i] + '"/>'
+          }
+        }
+        if (content && img_urls.length == 0) {
+          _temp = '<div class="chat-item"><div class="l-avatar"><img src="' + avatar +
+            '"/></div><div class="r-info"><div class="r-name-info"><span class="r-name">' + nick_name +
+            '</span><span class="r-role">' + role + '</span></div><div class="r-content">' + content +
+            '</div></div></div>'
+        } else if (content && img_urls.length > 0) {
+          _temp = '<div class="chat-item"><div class="l-avatar"><img src="' + avatar +
+            '"/></div><div class="r-info"><div class="r-name-info"><span class="r-name">' + nick_name +
+            '</span><span class="r-role">' + role + '</span></div><div class="r-content">' + content +
+            '</div><div class="r-content-iamge">' + imgs + '</div></div></div>'
+        } else if (!content && img_urls.length > 0) {
+          _temp = '<div class="chat-item"><div class="l-avatar"><img src="' + avatar +
+            '"/></div><div class="r-info"><div class="r-name-info"><span class="r-name">' + nick_name +
+            '</span><span class="r-role">' + role + '</span></div><div class="r-content-iamge">' + imgs +
+            '</div></div></div>'
+        } else {
+          _temp = '<div class="chat-item"><div class="l-avatar"><img src="' + avatar +
+            '"/></div><div class="r-info"><div class="r-name-info"><span class="r-name">' + nick_name +
+            '</span><span class="r-role">' + role + '</span></div></div></div>'
+        }
+
+        // 历史记录反转插入
+        $('.chat-content').prepend(_temp)
+        document.querySelector('.chat-content').scrollTop = document.querySelector('.chat-content').scrollHeight
+      }
+      /**
+       * 回放拉取历史聊天，curr_page:需拉取数据的页数，每页20条
+       * @params curr_page 当前页
+       */
+      function getRecordHistoryChatMsg(curr_page) {
+        SDK.vhall_get_record_history_chat_msg(curr_page)
+          .then(function (res) {
+
+            if (res.code == 200 && res.data) {
+              var data = res.data
+              console.log('获取历史回放消息----itc', data)
+              if (data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                  (function (i) {
+                    var msg = {
+                      data: {
+                        type: 'text',
+                        text_content: data[i].content
+                      },
+                      context: {
+                        role_name: data[i].role_name,
+                        avatar: ''
+                      }
+                    }
+                    if (data[i].avatar) {
+                      msg.context.avatar = data[i].avatar
+                    } else {
+                      msg.context.avatar = data[i].content.avatar
+                    }
+                    if (data[i].nick_name) {
+                      msg.context.nick_name = data[i].nick_name
+                    } else {
+                      msg.context.nick_name = data[i].nickname
+                    }
+                    return chatTemplate('history', msg)
+                  })(i)
+                }
+              }
+            }
+          })
+          .catch(function () {})
+      }
+
+      /**********************************抽奖相关操作****************************************/
+      // 显示抽奖界面
+      function handleStartLottery(data) {
+        $('.vh-lottery .lottery-header').html('开始抽奖')
+        $('.vh-lottery-wrap').css('display', 'block')
+        $('.vh-lottery .lottery-info').css('display', 'none')
+      }
+
+      function getLotteryFormInfo(id) {
+        SDK.getLotteryFormInfo().then(function (res) {
+          /**
+           * res.data.list => []
+           * field: 字段的中文名字
+           * is_required: 1:必填 0:非必填
+           * is_system: 0:不是 1:是 
+           * rank: 这个rank标识插入时候的顺序， 地址为1， 其他后面的自定义项依次递增
+           * field_key: 字段的key
+           * placeholder: 字段备注
+           * 
+           */
+          if (res.data && res.data.length > 0) {
+            newLotteryInfo = res.data
+            newLotteryFormTemplate(id, res.data)
+          }
+        })
+      }
+
+      function newLotteryFormTemplate(id, data) {
+        var str = ''
+        for (var i = 0; i < data.length; i++) {
+          (function (item) {
+            str = str + '<div class="lottery-new-form" rank="' + item.rank + '" fieldkey="' + item.field_key +
+              '"><span>' + item.field + '</span><input type="text" id="' + item.field_key + item.rank +
+              '" placeholder="' + item.placeholder + '"></div>'
+          })(data[i])
+        }
+
+        $('.vh-lottery-wrap').css('display', 'none')
+        $('.vh-lottery .lottery-header').html('')
+
+        $('.vh-lottery-wrap').css('display', 'block')
+        $('.vh-lottery .lottery-header').html('恭喜您中奖，请填写中奖信息')
+        $('.vh-lottery .lottery-info').css('display', 'block')
+        $('.vh-lottery .lottery-info .info').html('')
+        $('.vh-lottery .lottery-info .info').append($(str))
+        lottery.id = id
+      }
+      // 抽奖结束提示用户或者填写信息
+      function handleEndLottery(data) {
+        /**
+         * 用户需要在收到本人是否中奖信息后 分系统处理业务逻辑
+         * 新系统： 采用方案一。当中奖时通过对外api调用接口，获取需要填写中奖名单的相关信息，例如姓名 地址等以及相关必填选项。
+         *         该例中暂时采用sdk方法，不推荐用户单独使用，处于安全及稳定性，强烈推荐用户使用对外api相关接口
+         * 
+         * 老系统：采用方案二
+         * 
+         * JSSDK已对新老系统做区分
+         * 通过SDK.config.common.versionInfo字段判断
+         * new:新系统
+         * old:老系统
+         */
+        if (SDK.config.common.versionInfo == 'new') {
+          var lotteryId = ''
+          if (data.data) {
+            lotteryId = data.data.lottery_id
+          } else {
+            lotteryId = data.lottery_id
+          }
+          if (data.won) {
+            // 中奖，如果不需要领奖就不需要填写信息
+            if(data.data.need_take_award === 1) {
+              getLotteryFormInfo(lotteryId)
+            } else {
+              $('.vh-lottery-wrap').css('display', 'block')
+              $('.vh-lottery .lottery-header').html('您已中奖')
+              $('.vh-lottery .lottery-info').css('display', 'none')
+              setTimeout(function () {
+                  $('.vh-lottery-wrap').css('display', 'none')
+              }, 2000)
+            }
+          } else {
+            $('.vh-lottery-wrap').css('display', 'block')
+            $('.vh-lottery .lottery-header').html('很遗憾您未中奖')
+            $('.vh-lottery .lottery-info').css('display', 'none')
+            setTimeout(function () {
+              $('.vh-lottery-wrap').css('display', 'none')
+            }, 2000)
+          }
+          return
+        }
+        $('.vh-lottery-wrap').css('display', 'none')
+        $('.vh-lottery .lottery-header').html('')
+        if (data.won) {
+          $('.vh-lottery-wrap').css('display', 'block')
+          $('.vh-lottery .lottery-header').html('恭喜您中奖，请填写中奖信息')
+          $('.vh-lottery .lottery-info').css('display', 'block')
+          if (data.data) {
+            lottery.id = data.data.lottery_id
+          } else {
+            lottery.id = data.lottery_id
+          }
+        } else {
+          $('.vh-lottery-wrap').css('display', 'block')
+          $('.vh-lottery .lottery-header').html('很遗憾您未中奖')
+          $('.vh-lottery .lottery-info').css('display', 'none')
+          setTimeout(function () {
+            $('.vh-lottery-wrap').css('display', 'none')
+          }, 2000)
+        }
+      }
+      // 发送中奖人信息 { lottery_id:'抽奖id', name:'中奖人姓名',phone:'手机号', remarks:'备注' }
+      function submitLotteryInfo() {
+        if (SDK.config.common.versionInfo == 'new') {
+          submitNewLotteryInfo()
+          return
+        }
+        if ($('#lotteryPhone').val() != '' && $('#lotteryName').val() != '') {
+          SDK.sendLotteryInfo({
+            lottery_id: lottery.id,
+            name: $('#lotteryName').val(),
+            phone: $('#lotteryPhone').val(),
+            remarks: $('#lotteryMark').val()
+          })
+        }
+        $('.vh-lottery-wrap').css('display', 'none')
+      }
+      // 新系统提交中奖名单
+      function submitNewLotteryInfo() {
+        var arr = []
+        var bool = true
+        var reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
+
+        if (newLotteryInfo.length > 0) {
+          for (var i = 0; i < newLotteryInfo.length; i++) {
+            (function (item) {
+              var str = '#' + item.field_key + item.rank
+              var val = $(str).val()
+              if (item.is_required == 1 && !val) {
+                bool = false
+                handleChangeToast(item.field + '为必填项，不能为空')
+              } else if (item.field_key == 'phone' && val !== '' && !reg.test(Number(val))){
+                bool = false
+                handleChangeToast('请填写正确手机格式')
+              } else {
+                bool = true
+                item.field_value = val
+              }
+              arr.push({
+                field: item.field,
+                field_key: item.field_key,
+                field_value: item.field_value,
+                rank: item.rank,
+                placeholder: item.placeholder
+              })
+            })(newLotteryInfo[i])
+            if (!bool) {
+              break;
+            }
+          }
+        }
+        if (bool) {
+          SDK.sendLotteryInfo(arr, lottery.id)
+          $('.vh-lottery-wrap').css('display', 'none')
+        }
+      }
+      // format lottery info
+      function Info(
+          award_snapshoot,
+          command,
+          created_at,
+          extension,
+          icon,
+          id,
+          img_order,
+          lottery_status,
+          lottery_type,
+          need_take_award,
+          permission,
+          publish_winner,
+          remark,
+          submit_command,
+          take_award,
+          title,
+          win
+      ) {
+          this.award_snapshoot = award_snapshoot,
+          this.command = command,
+          this.created_at = created_at,
+          this.extension = extension,
+          this.icon = icon,
+          this.id = id,
+          this.img_order = img_order,
+          this.lottery_status = lottery_status,
+          this.lottery_type = lottery_type,
+          this.need_take_award = need_take_award,
+          this.permission = permission,
+          this.publish_winner = publish_winner,
+          this.remark = remark,
+          this.submit_command = submit_command,
+          this.take_award = take_award,
+          this.title = title,
+          this.win = win
+      }
+      // 拼接中奖历史
+      function lotteryHistoryTemplate (lottery) {
+          var award = lottery.award_snapshoot || {}
+          var awardName = award.award_name || '奖品'
+          var status
+          if (lottery.lottery_status === 1) {
+            if (lottery.win === 1) {
+              if (lottery.need_take_award === 1) {
+                if (lottery.take_award === 1) {
+                  status = '已领奖'
+                } else {
+                  status = '未领奖'
+                }
+              } else {
+                status = '已中奖'
+              }
+            } else {
+              status = '未中奖'
+            }
+          } else {
+            status = '抽奖中'
+          }
+          return '<div class="lottery-item"><div class="info">'+ awardName +'</div><div class="status">' + status + '</div></div>'
+      }
+      function getAllWinLotteryInfo () {
+          SDK.getAllWinLotteryInfo()
+          .then(function (data){
+              var _data = data
+              $('.vh-lottery-history .history-info').empty()
+              if (_data.length > 0) {
+                  for (var i = 0; i < _data.length; i ++) {
+                    var lottery = _data[i]
+                    var htmlTemp = lotteryHistoryTemplate(lottery)
+                    $('.vh-lottery-history .history-info').append(htmlTemp)
+                  }
+              } else {
+                $('.vh-lottery-history .history-info').append('<div style="text-align:center">未开启抽奖</div>')
+              }
+              $('.vh-lottery-history').show()
+          })
+          .catch(function(e) {
+              console.error(e)
+          })
+      }
+                
+      /**********************************签到相关操作****************************************/
+      //发送签到请求，值来自于startSign事件中的msg的消息体sign_id
+      function sendSign(id) {
+        SDK.sendSign(id)
+      }
+      /**********************************计时器相关操作****************************************/
+      function initTimerInfo(timerRes) {
+        // 获取计时器剩余时间等信息
+        timerParams.shijian = timerRes.remain_time
+        timerParams.beifenshijian = timerRes.duration
+        timerParams.is_timeout = timerRes.is_timeout
+        timerParams.is_all_show = timerRes.is_all_show
+        timerParams.status = timerRes.status == 4 ? 'zanting' : 'kaishi'
+        // 变化文字
+        timerTextChange()
+        if (timerRes.duration == -3599) return false
+        timeFormat(Math.abs(timerParams.shijian))
+        if (timerRes.status != 4) {
+          timerFun(timerParams.shijian)
+        }
+        handleTimer()
+        timerParams.timerVisible = true
+        if (timerParams.is_all_show == 1) {
+          timerParams.openTimer = true
+          // 展示计时器弹出框
+          $('.vh-timer-wrap').css('display', 'block')
+        }
+      }
+      /*function getTimerInfo() {
+          SDK.getTimerInfo().then(function (timerRes) {
+          })
+      }*/
+      function timeFormat(data) {
+        var tmpData = {
+          sec: data % 60 % 10,
+          ten_sec: parseInt(data % 60 / 10),
+          mon: parseInt(data / 60) % 10,
+          ten_mon: parseInt(parseInt(data / 60) / 10)
+        }
+        timerParams.sec = tmpData.sec
+        timerParams.ten_sec = tmpData.ten_sec
+        timerParams.mon = tmpData.mon
+        timerParams.ten_mon = tmpData.ten_mon
+        $('#timerSec').text(timerParams.sec)
+        $('#timerTenSec').text(timerParams.ten_sec)
+        $('#timerMon').text(timerParams.mon)
+        $('#timerTenMon').text(timerParams.ten_mon)
+        // if (timerParams.shijian < 1) {
+        //     $('.timer-li strong').css('color', '#fb3a32')
+        // } else {
+        //     $('.timer-li strong').css('color', '#ffffff')
+        // }
+      }
+
+      function timerFun(data) {
+        if (timerParams.timer) {
+          clearInterval(timerParams.timer)
+          timerParams.timer = null
+        }
+        timerParams.timer = setInterval(function () {
+          if (timerParams.is_timeout == 0) {
+            if (data == 1) {
+              timerParams.status = 'jieshu'
+            }
+            if (data == 0) {
+              if (timerParams.timer) {
+                clearInterval(timerParams.timer)
+                timerParams.timer = null
+              }
+              $('.vh-timer-wrap').css('display', 'none')
+              timerParams.openTimer = false
+              return false
+            }
+          }
+          if (data == -3599) {
+            if (timerParams.timer) {
+              clearInterval(timerParams.timer)
+              timerParams.timer = null
+            }
+            return false
+          }
+          if (data < 1) {
+            timerParams.status = 'chaoshi'
+          }
+          // 改变文字
+          timerTextChange()
+          timeFormat(Math.abs(--data))
+          timerParams.shijian = data
+        }, 1000)
+      }
+
+      function handleTimer() {
+        timerParams.timerVisible = true
+      }
+
+      function handleTimerClose() {
+        timerParams.timerVisible = false
+      }
+
+      function timerTextChange() {
+        if (timerParams.shijian < 0) {
+          $('#timerTitle').html('超时，开始正向计时')
+        } else {
+          var timerStr = timerParams.beifenshijian + '秒'
+          if (timerParams.beifenshijian < 60) {
+            timerStr = timerParams.beifenshijian + '秒'
+          } else {
+            timerStr = (parseInt(timerParams.beifenshijian / 60)) + '分' + (timerParams.beifenshijian % 60) + '秒'
+          }
+          timerStr += ' 倒计时'
+          if (timerParams.status == 'zanting') {
+            timerStr += '已暂停'
+          } else if (timerParams.status == 'jieshu') {
+            timerStr += '已结束'
+          } else {
+            timerStr += '进行中...'
+          }
+          $('#timerTitle').html(timerStr)
+        }
+      }
+      /**********************************公告相关操作****************************************/
+      // 获取历史直播公告记录,curr_page:需拉取数据的页数，默认值为1，每页20条
+      function getHistoryNotice(page = 0) {
+        SDK.vhall_get_history_notice(page).then(function (res) {
+          if (res.code == 200 && res.data) {
+            if (res.data.data.length > 0) {
+              for (var i = 0; i < res.data.data.length; i++) {
+                (function (i) {
+                  var msg = {
+                    data: {
+                      push_time: res.data.data[i].created_at,
+                      room_announcement_text: res.data.data[i].content
+                    }
+                  }
+                  handleAnnouncement(msg)
+                })(i)
+              }
+            }
+          }
+        }).catch(function (e) {
+          SDK.$emit('error', {
+            type: e.code,
+            data: e.msg
+          })
+        })
+      }
+      /**********************************问答相关操作****************************************/
+      // 切换问答输出按钮
+      function handleQuestionAnswerSwitch(type) {
+        if (type != 'open') {
+          _qa.status = false
+          if ($('.menu-tab .active span').attr('name') == 'qa') {
+            $('#chatControl').css('visibility', 'hidden')
+          }
+        } else {
+          _qa.status = true
+          if ($('.menu-tab .active span').attr('name') == 'qa') {
+            $('#chatControl').css('visibility', 'visible')
+            $('.msg-control .chat-send-control').css('display', 'none')
+            $('.msg-control .qa-send-control').css('display', 'block')
+          }
+        }
+      }
+      // 提问问题发送事件
+      function sendQuestionAnswerMsg() {
+        if ($('#qaMsg').val() == '') {
+          alert('内容不能为空')
+        } else if ($('#qaMsg').val().length > 140) {
+          alert('最多输入140个文字')
+          return
+        }
+        SDK.sendQuestion($('#qaMsg').val().trim())
+        $('#qaMsg').val('')
+      }
+      // 自己发送的问答消息监听回显
+      function handleQuestionAnswerMsg(msg) {
+        if (msg.data) {
+          var temp = questionAnswerTemplate(msg)
+          $('.room-content .qa-content').append(temp)
+        }
+      }
+      // 主讲人回复问答消息
+      function handleQAndACommit(data) {
+        if (data.data) {
+          var temp = questionAnswerCommitTemplate(data)
+          $('.room-content .qa-content').append(temp)
+        }
+      }
+      // 删除回答
+      function handleDeleteAnswer(msg) {
+        var question_id = ''
+        var id = ''
+        if (msg.data) {
+          id = '.answer-temp-' + msg.data.question_answer_id
+        } else {
+          id = '.answer-temp-' + msg.id
+        }
+        if ($(id)) {
+          $(id).remove()
+        }
+      }
+      // 自己提问回显模板
+      function questionAnswerTemplate(msg) {
+        var avatar = msg.data.avatar
+        var nick_name = msg.data.nick_name
+        var created_at = msg.data.created_at
+        var content = msg.data.content
+        if (avatar == '') {
+          avatar = STATIC_URL + '/static/images/watch/head50.png'
+        }
+        var _temp = '<div class="qa-item"><div class="self-qa"><div class="avatar"><img src="' + avatar +
+          '"/></div><div class="r-wrap"><div class="r-info"><span>' + nick_name + '</span><span>' + created_at +
+          '</span></div><div class="r-content">' + content + '</div></div></div> </div>'
+        return _temp
+      }
+      // 主讲人问答回复模板
+      function questionAnswerCommitTemplate(msg) {
+        var type = msg.data.type
+        var avatar = msg.data.avatar
+        var nick_name = msg.data.nick_name
+        var created_at = msg.data.created_at
+        var join_id = msg.data.join_id
+        var content = msg.data.content
+        var answer = msg.data.answer
+        var id = msg.data.id // 问题id
+        var _temp = ''
+        var is_open = answer.is_open
+        var sendId = SDK.config.userInfo.userId
+        if (avatar == '') {
+          avatar = STATIC_URL + '/static/images/watch/head50.png'
+        }
+        var str = ''
+        if (answer.role_name == 'host') {
+          str = customRoleNameInfo.host_name + '回答'
+        } else if (answer.role_name == 'assistant') {
+          str = customRoleNameInfo.assistant_name + '回答'
+        } else if (answer.role_name == 'guest') {
+          str = customRoleNameInfo.guest_name + '回答'
+        } else {
+          str = ''
+        }
+        if (is_open == 1 || (is_open == 0 && sendId == join_id)) {
+          if (type == 'question_answer_commit' || type == 'answer') {
+            _temp = '<div class="qa-item answer-temp-' + answer.id +
+              '"><div class="self-qa"><div class="avatar"><img src="' + avatar +
+              '" alt=""></div><div class="r-wrap"><div class="r-info"><span>' + nick_name + '</span><span>' +
+              created_at + '</span></div><div class="r-content">' + content +
+              '</div></div></div><div class="r-answer"><div class="answer-info"><div>' + answer.nick_name +
+              '&nbsp;|&nbsp;<span class="answer-role">' + str + '</span></div><div>' +
+              '</div></div><div class="answer-content">' + answer.content + '</div></div></div>'
+            return _temp
+          }
+        } else {
+          return ''
+        }
+      }
+      // 获取直播问答记录
+      function getLiveHistoryQuestionMsg() {
+        SDK.vhall_get_live_history_question_msg()
+          .then(function (data) {
+
+            var res = data.data,
+              temp = ''
+            if (res.length > 0) {
+              for (var i = 0; i < res.length; i++) {
+                (function (i) {
+                  if (res[i].data.answer) {
+                    temp = questionAnswerCommitTemplate(res[i])
+                  } else {
+                    temp = questionAnswerTemplate(res[i])
+                  }
+                  $('.room-content .qa-content').append(temp)
+                })(i)
+              }
+            }
+          })
+          .catch(function (e) {
+            // console.log('获取直播问答记录失败>>>', e)
+          })
+      }
+      // 获取回放问答记录
+      function getHistoryQuestionMsg() {
+        SDK.vhall_get_history_question_msg()
+          .then(function (data) {
+            var res = data.data,
+              temp = ''
+            if (res.length > 0) {
+              for (var i = 0; i < res.length; i++) {
+                var message = (function (i) {
+                  if (res[i].data.answer) {
+                    temp = questionAnswerCommitTemplate(res[i])
+                  } else {
+                    temp = questionAnswerTemplate(res[i])
+                  }
+                  return temp
+                })(i)
+                $('.room-content .qa-content').append(message)
+              }
+            }
+          })
+      }
+      /**********************************文档相关操作****************************************/
+
+      // H5文档放大
+      function docZoomIn() {
+        SDK.doc.zoomIn()
+      }
+      // H5文档缩小
+      function docZoomOut() {
+        SDK.doc.zoomOut()
+      }
+      // H5文档重置大小
+      function docZoomReset() {
+        SDK.doc.docReset()
+      }
+      // H5文档移动
+      function docMove() {
+        SDK.doc.docMove()
+      }
+      // H5文档下一页
+      function docNextPage() {
+        SDK.doc.nextPage()
+      }
+      // H5文档上一页
+      function docPrevPage() {
+        SDK.doc.prevPage()
+      }
+      /**********************************问卷相关事件****************************************/
+      // 获取问卷列表:返回值触发消息监听得到
+      function getQuestionarieList(id) {
+        SDK.queryQuestionList(id)
+      }
+      // falsh 发送问卷答案 （H5包含整个功能,falsh对外提供方法）
+      // 数据格式
+      function sendQuestionAnswer(msg) {
+        var data = {
+          "survey_id": "8102",
+          "data": {
+            "text": {
+              "7722": "少时诵诗书所"
+            },
+            "c": {
+              "7720": {
+                "13275": "选项1"
+              }
+            },
+            "checkbox": {
+              "7721": {
+                "13277": "选项1",
+                "13278": "选项2",
+                "13279": "是是是"
+              }
+            },
+            "select": {
+              "7723": "19,1188"
+            }
+          }
+        }
+        SDK.sendQuestionPagerAnswer(data)
+      }
+      /**********************************点击事件****************************************/
+      function getEmojiList() {
+        var emojiUrl = '//cnstatic01.e.vhall.com/static/img/arclist'
+        var faceArr = {
+          '[微笑]': '1',
+          '[撇嘴]': '2',
+          '[色]': '3',
+          '[发呆]': '4',
+          '[得意]': '5',
+          '[流泪]': '6',
+          '[害羞]': '7',
+          '[闭嘴]': '8',
+          '[睡]': '9',
+          '[哭]': '10',
+          '[尴尬]': '11',
+          '[发怒]': '12',
+          '[调皮]': '13',
+          '[呲牙]': '14',
+          '[惊讶]': '15',
+          '[难过]': '16',
+          '[酷]': '17',
+          '[汗]': '18',
+          '[抓狂]': '19',
+          '[吐]': '20',
+          '[偷笑]': '21',
+          '[愉快]': '22',
+          '[白眼]': '23',
+          '[傲慢]': '24',
+          '[饥饿]': '25',
+          '[困]': '26',
+          '[惊恐]': '27',
+          '[流汗]': '28',
+          '[憨笑]': '29',
+          '[悠闲]': '30',
+          '[奋斗]': '31',
+          '[咒骂]': '32',
+          '[疑问]': '33',
+          '[嘘]': '34',
+          '[晕]': '35',
+          '[疯了]': '36',
+          '[衰]': '37',
+          '[骷髅]': '38',
+          '[敲打]': '39',
+          '[再见]': '40',
+          '[擦汗]': '41',
+          '[抠鼻]': '42',
+          '[鼓掌]': '43',
+          '[糗大了]': '44',
+          '[坏笑]': '45',
+          '[左哼哼]': '46',
+          '[右哼哼]': '47',
+          '[哈欠]': '48',
+          '[鄙视]': '49',
+          '[委屈]': '50',
+          '[快哭了]': '51',
+          '[阴险]': '52',
+          '[亲亲]': '53',
+          '[吓]': '54',
+          '[可怜]': '55',
+          '[菜刀]': '56',
+          '[西瓜]': '57',
+          '[啤酒]': '58',
+          '[篮球]': '59',
+          '[乒乓]': '60',
+          '[咖啡]': '61',
+          '[饭]': '62',
+          '[猪头]': '63',
+          '[玫瑰]': '64',
+          '[凋谢]': '65',
+          '[嘴唇]': '66',
+          '[爱心]': '67',
+          '[心碎]': '68',
+          '[蛋糕]': '69',
+          '[闪电]': '70',
+          '[炸弹]': '71',
+          '[刀]': '72',
+          '[足球]': '73',
+          '[瓢虫]': '74',
+          '[便便]': '75',
+          '[月亮]': '76',
+          '[太阳]': '77',
+          '[礼物]': '78',
+          '[拥抱]': '79',
+          '[强]': '80',
+          '[弱]': '81',
+          '[握手]': '82',
+          '[胜利]': '83',
+          '[抱拳]': '84',
+          '[勾引]': '85',
+          '[拳头]': '86',
+          '[差劲]': '87',
+          '[爱你]': '88',
+          '[NO]': '89',
+          '[OK]': '90'
+        }
+        var emojiToPath = function (key) {
+          if (key.indexOf('[删除]') > -1) {
+            return emojiUrl + '/' + faceArr[key] + '@2x.png'
+          } else {
+            return emojiUrl + '/Expression_' + faceArr[key] + '@2x.png'
+          }
+        }
+        var result = []
+        for (var key in faceArr) {
+          (function (key) {
+            result.push({
+              name: key,
+              value: faceArr[key],
+              src: emojiToPath(key)
+            })
+          })(key)
+        }
+        return result
+      }
+
+      // 切换tab以及内容区展示情况
+      $(".menu-tab-item").on('click', 'span', function () {
+        var target = $(this).text()
+        $('.menu-tab .active').removeClass('active')
+        $(this).parent().addClass('active')
+        $('.room-content .chat-content').hide()
+        $('.room-content .notice-content').hide()
+        $('.room-content .qa-content').hide()
+        console.log($(this))
+        if (target == '聊天') {
+          $('.room-content .chat-content').show()
+          $('#chatControl').css('visibility', 'visible')
+          $('.msg-control .chat-send-control').css('display', 'block')
+          $('.msg-control .qa-send-control').css('display', 'none')
+          $('.room-content .doc-wrap').css('visibility', 'hidden')
+          $('.room-content .doc-wrap').css('zIndex', '-1')
+          $('.mobile-doc-control').css('display', 'none')
+        } else if (target == '公告') {
+          $('#chatControl').css('visibility', 'hidden')
+          $('.room-content .doc-wrap').css('visibility', 'hidden')
+          $('.mobile-doc-control').css('display', 'none')
+          $('.room-content .notice-content').show()
+          $('.room-content .doc-wrap').css('zIndex', '-1')
+        } else if ($(this).attr('name') == 'qa') {
+          $('.msg-control .chat-send-control').css('display', 'none')
+          $('.mobile-doc-control').css('display', 'none')
+          $('.room-content .doc-wrap').css('visibility', 'hidden')
+          $('.room-content .qa-content').show()
+          $('.room-content .doc-wrap').css('zIndex', '-1')
+          if (_qa.status) {
+            $('#chatControl').css('visibility', 'visible')
+            $(('.msg-control .qa-send-control')).css('display', 'block')
+          } else {
+            $('#chatControl').css('visibility', 'hidden')
+          }
+        } else if (target == '文档') {
+          if (SDK.config.vss) {
+            $('.mobile-doc-control').css('display', 'block')
+          }
+          $('#chatControl').css('visibility', 'hidden')
+          $('.room-content .doc-wrap').css('zIndex', '1')
+          $('.room-content .doc-wrap').css('visibility', 'visible')
+        }
+        $('.face-pannel').css('display', 'none')
+      });
+      $('.face-pannel').mouseleave(function () {
+        $(this).css('display', 'none')
+      })
+      // 发送聊天消息
+      $('#sendMsg').click(function () {
+        sendChatMsg()
+      })
+      $('#qaSendMsg').click(function () {
+        sendQuestionAnswerMsg()
+      })
+      // 打开表情面板
+      $('#facePannel').click(function () {
+        var statu = $('.face-pannel').css('display')
+        if (statu == 'block') {
+          $('.face-pannel').css('display', 'none')
+        } else {
+          $('.face-pannel').css('display', 'block')
+          handleFacesData(getEmojiList())
+        }
+      })
+      // 关闭签到
+      $('.sign-close').click(function () {
+        $('.sign-wrap').css('display', 'none')
+        clearInterval(signParams._sign_timer)
+        signParams._sign_timer = null
+        signParams._sign_id = ''
+        signParams._openSignStatu = false
+        $('.sign-second').text('0秒')
+      })
+      // 点击签到
+      $('.sign-btn').click(function () {
+        SDK.sendSign(signParams._sign_id)
+      })
+      $('#lotterySubmit').click(function () {
+        submitLotteryInfo()
+      })
+      // 关闭计时器弹框
+      $('.timer-close').click(function () {
+        $('.vh-timer-wrap').css('display', 'none')
+        handleTimerClose()
+      })
+      // 计时器-拖动
+      $('#timerDom').mousedown(function (e) {
+        // e.pageX
+        var positionDiv = $(this).offset();
+        var distenceX = e.pageX - positionDiv.left;
+        var distenceY = e.pageY - positionDiv.top;
+        $(document).mousemove(function (e) {
+          var x = e.pageX - distenceX;
+          var y = e.pageY - distenceY;
+          if (x < 0) {
+            x = 0;
+          } else if (x > $(document).width() - $('#timerDom').outerWidth(true)) {
+            x = $(document).width() - $('#timerDom').outerWidth(true);
+          }
+          if (y < 60) {
+            y = 60;
+          } else if (y > window.innerHeight - $('#timerDom').height()) {
+            y = window.innerHeight - $('#timerDom').height()
+          } else if (y > $(document).height() - $('#timerDom').outerHeight(true)) {
+            y = $(document).height() - $('#timerDom').outerHeight(true);
+          }
+          $('#timerDom').css({
+            'left': x + 'px',
+            'top': y + 'px'
+          });
+        });
+        $(document).mouseup(function () {
+          $(document).off('mousemove');
+        });
+      });
+
+      $('.doc-contorl-in').click(function () {
+        docZoomIn()
+      })
+      $('.doc-contorl-out').click(function () {
+        docZoomOut()
+      })
+      $('.doc-contorl-move').click(function () {
+        docMove()
+      })
+      $('.doc-contorl-reset').click(function () {
+        docZoomReset()
+      })
+      $('.doc-contorl-next').click(function () {
+        docNextPage()
+      })
+      $('.doc-contorl-prev').click(function () {
+        docPrevPage()
+      })
+      $('.mobile-doc-in').click(function () {
+        docZoomIn()
+      })
+      $('.mobile-doc-out').click(function () {
+        docZoomOut()
+      })
+      $('.mobile-doc-move').click(function () {
+        docMove()
+      })
+      $('.mobile-doc-reset').click(function () {
+        docZoomReset()
+      })
+      $('.mobile-doc-next').click(function () {
+        docNextPage()
+      })
+      $('.mobile-doc-prev').click(function () {
+        docPrevPage()
+      })
+      // demo模拟数据
+      // 获取倍速列表
+      $('.demo-btn-speed-list').click(function () {
+        getSpeedList()
+      })
+      // 设置倍速
+      $('.demo-btn-set-speed').click(function () {
+        if ($('#demoSetSpeed').val() == '') {
+          setPlaySpeed(2)
+        } else {
+          setPlaySpeed($('#demoSetSpeed').val())
+        }
+      })
+      // 打开弹幕
+      $('.demo-btn-barrage-open').click(function () {
+        openBarrage()
+      })
+      // 关闭弹幕
+      $('.demo-btn-barrage-close').click(function () {
+        closeBarrage()
+      })
+      $('.demo-btn-add-barrage').click(function () {
+        sendBarrage('发送弹幕')
+      })
+      // 修改弹幕样式
+      $('.demo-btn-set-barrage-style').click(function () {
+        setBarrageStyle({
+          positionRange: [0, 0.25], //全屏现实化从上之 [startPostion: number, endPosition: number] 百分比，区域显示    
+          speed: 10000,
+          style: {
+            fontSize: 12, // 弹幕字体大小
+            fontFamily: 'Microsoft Yahei', //弹幕字体
+            color: 'red', // 弹幕颜色
+            border: 'none', // 弹幕描边
+            textShadow: 'x y blur color', // 默认值： 1px 1px 0px #fff 参考：https://www.w3school.com.cn/cssref/pr_text-shadow.asp 弹幕阴影
+            borderWidth: 0, //单位 px
+            padding: 0, // 左右内边距
+            opacity: 100, // 不透明度
+            backgroundColor: 'none' // 背景色
+          } // 颜色   string
+        })
+      })
+      // 设置清晰度
+      $('.demo-btn-definition').click(function () {
+        setPlayerDefinition($('#demoDefinitionVal').val())
+      })
+      // 设置回放时间
+      $('.demo-btn-set-record-time').click(function () {
+        setRecordTime($('#demoSetRecordTime').val())
+      })
+      // 播放
+      $('.demo-btn-play').click(function () {
+        play()
+      })
+      // 暂停
+      $('.demo-btn-pause').click(function () {
+        pause()
+      })
+      // 销毁播放器
+      $('.demo-btn-destroy').click(function () {
+        var no_delay_webinar = SDK.config.common.no_delay_webinar
+        var webinarStatus = SDK.config.common.webinarStatus // 1 直播
+        if (no_delay_webinar == 1 && webinarStatus == 1) {
+          SDK.interact.destroyInstance()
+        }
+        destroy()
+      })
+      $('#demoChangeName').click(function (event) {
+        event.stopPropagation()
+      })
+      $('#demoSetSpeed').click(function (event) {
+        event.stopPropagation()
+      })
+      $('.demo-btn-chat-live-page').click(function (event) {
+        event.stopPropagation()
+      })
+      // 获取直播历史聊天消息 todo
+      $('.demo-btn-chat-live').click(function () {
+        var page = document.querySelector('.demo-btn-chat-live-page')
+        getLiveHistoryChatMsg(page.value)
+      })
+      // 获取回播历史聊天消息 todo
+      $('.demo-btn-rchat-live').click(function () {
+        var page = document.querySelector('.demo-btn-chat-live-page')
+        getRecordHistoryChatMsg(page.value);
+      })
+      // 直播中获取活动下中奖记录信息 不支持回放中获取
+      $('.demo-btn-lottery-record').click(function () {
+          getAllWinLotteryInfo()
+      })
+
+      // 获取回放问答记录
+      $('.demo-btn-quesAns-record').click(function () {
+        getHistoryQuestionMsg()
+      })
+      // 获取直播问答记录
+      $('.demo-btn-quesAns-live').click(function () {
+        getLiveHistoryQuestionMsg()
+      })
+      // 获取历史公告记录
+      $('.demo-btn-announcement').click(function () {
+        getHistoryNotice(0)
+      })
+      // 获取当前活动状态
+      $('.demo-btn-room-info').click(function () {
+        getRoomInfo()
+      })
+      // 获取当前用户状态
+      $('.demo-btn-user-info').click(function () {
+        getUserInfo()
+      })
+      // 更新当前用户昵称
+      $('.demo-btn-change-name').click(function () {
+        updateUserInfo($('#demoChangeName').val())
+      })
+      // 获取清晰度列表
+      $('.demo-control-definition').click(function (e) {
+        e.stopPropagation();
+        getDefinition()
+      })
+      $('#flashQuesBtn').click(function () {
+        sendQuestionAnswer()
+      })
+      $('.demo-tool-tip').click(function () {
+        $('.demo-control').css('right', '0px')
+      })
+      $('.demo-control').click(function (event) {
+        $('.demo-control').css('right', '-200px')
+      })
+      $('#sendCustomMsg').click(function () {
+        sendCustomEvent()
+      })
+      $('#demoSetRecordTime').click(function (e) {
+        e.stopPropagation();
+      })
+      $('#demoDefinitionVal').click(function (e) {
+        e.stopPropagation();
+      })
+      $('.vh-lottery-wrap').click(function () {
+        $('.vh-lottery-wrap').css('display', 'none')
+      })
+      $('.vh-lottery').click(function (e) {
+        e.stopPropagation();
+      })
+      // 中奖历史关闭按钮
+      $('.lottery-history-close').click(function () {
+        $('.vh-lottery-history').hide()
+      })
+
+    }</script></body></html>
